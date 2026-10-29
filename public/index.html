@@ -46,11 +46,199 @@ else if(/invalid_transaction|invalid transaction/.test(text)){report={title:"Tra
 else if(/timeout_error|timeout error|timed out/.test(text)){report={title:"Transaction status query timed out",level:"Outcome unknown",tone:"warn",summary:"The request timed out. A timeout alone does not establish whether the transaction succeeded or failed.",facts:["The input includes timeout language.",...flat.slice(0,8).map(([key,value])=>`${key}: ${value}`)],actions:["Inspect the nested cause.","Retry with another RPC provider if appropriate.","Check an explorer for older transactions.","Do not resubmit until you have checked the transaction status."],confidence:"High for general timeout interpretation; outcome unknown",raw:parsed?JSON.stringify(parsed,null,2):input}}return report}
 function hasStatus(status,key){return !!status&&Object.prototype.hasOwnProperty.call(status,key)}
 function collectFailureText(value,output=[]){if(typeof value==="string"){if(/E\d+:|panic|slippage|execution error|failed|failure/i.test(value))output.push(value)}else if(Array.isArray(value)){value.forEach(item=>collectFailureText(item,output))}else if(value&&typeof value==="object"){Object.values(value).forEach(item=>collectFailureText(item,output))}return [...new Set(output)]}
-function classifyTxResult(data,hash,sender,httpStatus){const r=data&&data.result?data.result:{},txOutcome=r.transaction_outcome||{},txExecution=txOutcome.outcome||{},txStatus=r.status||txExecution.status||null,receipts=Array.isArray(r.receipts_outcome)?r.receipts_outcome:[];const txSucceeded=hasStatus(txStatus,"SuccessValue")||hasStatus(txStatus,"SuccessReceiptId"),txFailed=hasStatus(txStatus,"Failure");const failedReceipts=receipts.filter(receipt=>hasStatus(receipt&&receipt.outcome?receipt.outcome.status:null,"Failure"));const facts=[`Transaction hash: ${hash}`,`Sender account: ${sender}`,`RPC HTTP status: ${httpStatus}`,`Transaction status: ${txStatus?JSON.stringify(txStatus):"Not provided"}`,`Block hash: ${txOutcome.block_hash||"Not provided"}`,`Receipt outcomes returned: ${receipts.length}`,`Failed receipts detected: ${failedReceipts.length}`];failedReceipts.forEach((receipt,index)=>{const outcome=receipt.outcome||{},status=outcome.status||{},receiver=receipt.receipt?receipt.receipt.receiver_id:null;facts.push(`Failed receipt ${index+1}: ${receipt.id||"Receipt ID unavailable"}`);if(receiver)facts.push(`Failed receipt receiver: ${receiver}`);const errors=collectFailureText(status);facts.push(`Receipt failure detail: ${errors.length?errors.join(" | "):JSON.stringify(status)}`)});let report;
-if(failedReceipts.length){report={title:txSucceeded?"Transaction reports success, but a receipt failed":"Failed receipt execution detected",level:"Receipt failure detected",tone:"bad",summary:txSucceeded?`The transaction has a top level success status, but ${failedReceipts.length} returned receipt(s) failed. The individual receipt results explain which contract action did not complete.`:`The RPC returned ${failedReceipts.length} failed receipt(s). Inspect their details to understand the execution outcome.`,confidence:"High for the failed receipt status present in the RPC response",actions:["Inspect each failed receipt and its error.","Check other receipts for successful actions or refunds.","Distinguish top level transaction status from individual receipt outcomes.","Use the specific contract error to decide what to correct before retrying."]}}
-else if(txFailed){report={title:"Transaction execution reported a failure",level:"Execution failed",tone:"bad",summary:"The RPC returned a Failure status. Review the nested error and receipt outcomes to identify the cause.",confidence:"Based on the live RPC response",actions:["Inspect the transaction failure details.","Check receipt outcomes for additional errors.","Correct the identified issue before retrying."]}}
-else if(txSucceeded){report={title:"Transaction execution reported success",level:"Executed",tone:"good",summary:"The RPC returned a success status and no failed receipts were found in the receipt outcomes returned. This conclusion is limited to the data supplied by the RPC.",confidence:"Based on the live RPC response; only returned receipts were checked",actions:["Review receipt logs if you need to understand contract side effects.","Check whether your use case requires stronger finality.","Keep the transaction hash with this report."]}}
-else{report={title:"Transaction status needs review",level:"Needs review",tone:"warn",summary:"The RPC returned transaction data, but the available status could not be classified safely.",confidence:"Limited by the status data returned",actions:["Review the raw response.","Inspect receipt outcomes.","Verify with a trusted explorer if needed."]}}report.badge=report.level;report.facts=facts;report.raw=JSON.stringify(data,null,2);return report}
+function classifyTxResult(data, hash, sender, httpStatus) {
+  const r = data && data.result ? data.result : {};
+  const txOutcome = r.transaction_outcome || {};
+  const txExecution = txOutcome.outcome || {};
+  const txStatus = r.status || txExecution.status || null;
+  const receipts = Array.isArray(r.receipts_outcome) ? r.receipts_outcome : [];
+
+  const hasStatus = (status, key) =>
+    !!status && Object.prototype.hasOwnProperty.call(status, key);
+
+  const statusOf = receipt =>
+    receipt && receipt.outcome ? receipt.outcome.status : null;
+
+  const failedReceipts = receipts.filter(receipt => hasStatus(statusOf(receipt), "Failure"));
+  const successfulReceipts = receipts.filter(receipt => {
+    const status = statusOf(receipt);
+    return hasStatus(status, "SuccessValue") || hasStatus(status, "SuccessReceiptId");
+  });
+  const unknownReceipts = receipts.filter(receipt => {
+    const status = statusOf(receipt);
+    return !hasStatus(status, "Failure") &&
+      !hasStatus(status, "SuccessValue") &&
+      !hasStatus(status, "SuccessReceiptId");
+  });
+
+  const txSucceeded =
+    hasStatus(txStatus, "SuccessValue") ||
+    hasStatus(txStatus, "SuccessReceiptId");
+  const txFailed = hasStatus(txStatus, "Failure");
+
+  function collectText(value, output = []) {
+    if (typeof value === "string") {
+      output.push(value);
+    } else if (Array.isArray(value)) {
+      value.forEach(item => collectText(item, output));
+    } else if (value && typeof value === "object") {
+      Object.values(value).forEach(item => collectText(item, output));
+    }
+    return [...new Set(output)];
+  }
+
+  function receiptDescription(receipt, index) {
+    const outcome = receipt.outcome || {};
+    const status = outcome.status || {};
+    const logs = Array.isArray(outcome.logs) ? outcome.logs : [];
+    const receiver = receipt.receiver_id ||
+      (receipt.receipt && receipt.receipt.receiver_id) ||
+      outcome.executor_id ||
+      null;
+    const statusLabel = hasStatus(status, "Failure")
+      ? "FAILED"
+      : hasStatus(status, "SuccessValue") || hasStatus(status, "SuccessReceiptId")
+        ? "SUCCESS"
+        : "UNKNOWN";
+
+    return {
+      receipt,
+      index,
+      status,
+      statusLabel,
+      logs,
+      receiver,
+      text: collectText([status, logs]).join(" ")
+    };
+  }
+
+  const receiptDetails = receipts.map(receiptDescription);
+  const allReceiptText = receiptDetails.map(item => item.text).join("\n");
+  const explicitRefundClues = receiptDetails.filter(item =>
+    /\brefund(?:ed)?\b|\breturn(?:ed)? funds\b|\btransfer(?:red)?\b/i.test(item.text)
+  );
+  const failedErrorMessages = failedReceipts.map(receipt => {
+    const outcome = receipt.outcome || {};
+    const status = outcome.status || {};
+    const logs = Array.isArray(outcome.logs) ? outcome.logs : [];
+    const messages = collectText([status, logs]).filter(value =>
+      /E\d+:|panic|error|failed|failure|slippage|execution/i.test(value)
+    );
+    return [...new Set(messages)];
+  });
+
+  const facts = [
+    `Transaction hash: ${hash}`,
+    `Sender account: ${sender}`,
+    `RPC HTTP status: ${httpStatus}`,
+    `Top level transaction status: ${txStatus ? JSON.stringify(txStatus) : "Not provided"}`,
+    `Transaction block hash: ${txOutcome.block_hash || r.transaction?.block_hash || "Not provided"}`,
+    `Receipt outcomes returned: ${receipts.length}`,
+    `Successful receipts detected: ${successfulReceipts.length}`,
+    `Failed receipts detected: ${failedReceipts.length}`,
+    `Receipt outcomes with unrecognized status: ${unknownReceipts.length}`
+  ];
+
+  receiptDetails.forEach(item => {
+    const receipt = item.receipt;
+    const outcome = receipt.outcome || {};
+    const id = receipt.id || "Receipt ID unavailable";
+    facts.push(`Receipt ${item.index + 1} status: ${item.statusLabel} (${id})`);
+    if (item.receiver) facts.push(`Receipt ${item.index + 1} executor or receiver: ${item.receiver}`);
+
+    if (item.statusLabel === "FAILED") {
+      const messages = failedErrorMessages[item.index] || [];
+      facts.push(`Receipt ${item.index + 1} failure detail: ${
+        messages.length ? messages.join(" | ") : JSON.stringify(item.status)
+      }`);
+    }
+
+    if (item.logs.length) {
+      const relevantLogs = item.logs.filter(log =>
+        /refund|transfer|slippage|panic|error|fail/i.test(log)
+      ).slice(0, 3);
+      relevantLogs.forEach(log =>
+        facts.push(`Receipt ${item.index + 1} relevant log: ${log}`)
+      );
+    }
+  });
+
+  if (explicitRefundClues.length) {
+    facts.push(
+      "Refund or transfer wording appears in receipt logs; this is a clue only and does not independently prove that funds reached the intended account."
+    );
+  } else {
+    facts.push(
+      "Refund status: not confirmed by the receipt outcome fields returned in this response."
+    );
+  }
+
+  let report;
+  if (failedReceipts.length > 0) {
+    report = {
+      title: txSucceeded
+        ? "Transaction reports success, but a receipt failed"
+        : "Failed receipt execution detected",
+      level: "Receipt failure detected",
+      tone: "bad",
+      summary: txSucceeded
+        ? `The top level transaction status reports success, but ${failedReceipts.length} receipt(s) failed. ${successfulReceipts.length} receipt(s) report success. A failed receipt can coexist with successful downstream actions, so inspect the receipt details before deciding whether funds were returned.`
+        : `The RPC returned ${failedReceipts.length} failed receipt(s) and ${successfulReceipts.length} successful receipt(s). Review the individual receipt outcomes to understand which actions completed.`,
+      confidence: "High for the receipt statuses present in this RPC response; refund or asset movement is not inferred from status alone.",
+      actions: [
+        "Read the failed receipt details and contract error.",
+        "Review successful receipt logs for explicit transfer or refund evidence.",
+        "Confirm any claimed refund by checking the relevant token transfer or account balance history in a trusted explorer.",
+        "Do not assume a successful top level status means every contract action succeeded."
+      ]
+    };
+  } else if (txFailed) {
+    report = {
+      title: "Transaction execution reported a failure",
+      level: "Execution failed",
+      tone: "bad",
+      summary: "The RPC returned a Failure status for the top level transaction. No failed receipt was detected in the returned receipt list, but the top level error still requires review.",
+      confidence: "Based on the status returned by the RPC; details may be incomplete.",
+      actions: [
+        "Inspect the top level failure details and receipt outcomes.",
+        "Check any successful receipts for side effects that occurred before or after the failure.",
+        "Verify asset movement before retrying the operation."
+      ]
+    };
+  } else if (txSucceeded && unknownReceipts.length === 0) {
+    report = {
+      title: "Transaction execution reported success",
+      level: "Executed",
+      tone: "good",
+      summary: `The top level transaction reports success and no failed receipts were found among the ${receipts.length} receipt outcome(s) returned. This confirms the reported execution statuses, not the business outcome of every contract action.`,
+      confidence: "Based on the live RPC response; only receipt outcomes returned by the provider were checked.",
+      actions: [
+        "Review receipt logs if you need to understand contract side effects.",
+        "Verify token transfers or balance changes separately when the financial outcome matters.",
+        "Check whether your use case requires stronger finality.",
+        "Keep the transaction hash with this report."
+      ]
+    };
+  } else {
+    report = {
+      title: "Transaction outcome needs review",
+      level: "Needs review",
+      tone: "warn",
+      summary: "The response does not provide enough recognized status information to make a reliable success or failure determination.",
+      confidence: "Limited by the status fields returned by the RPC.",
+      actions: [
+        "Review the original RPC response.",
+        "Inspect receipt statuses and logs.",
+        "Verify the transaction with a trusted explorer if needed."
+      ]
+    };
+  }
+
+  report.badge = report.level;
+  report.facts = facts;
+  report.raw = JSON.stringify(data, null, 2);
+  return report;
+}
 $("analyzeBtn").addEventListener("click",()=>{const input=$("errorInput").value.trim();if(!input){render({title:"Paste an error to begin",level:"Waiting for input",tone:"warn",summary:"Add an RPC error or JSON response in the field above.",confidence:"No analysis performed",facts:["No input was provided."],actions:["Paste the original RPC error and analyze it."],raw:""});return}render(diagnose(input))});
 $("sampleBtn").addEventListener("click",()=>{$("errorInput").value=SAMPLE;render(diagnose(SAMPLE))});
 $("clearBtn").addEventListener("click",()=>{$("errorInput").value="";result.innerHTML='<div class="empty-state"><div class="empty-symbol">✦</div><strong>Your report will appear here.</strong><p>Run a transaction lookup or paste an RPC error to begin.</p></div>';setPill("Waiting for input","")});
