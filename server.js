@@ -1,7 +1,12 @@
+
 const express = require('express');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
+
+// Serve the frontend files from the public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,10 +16,12 @@ const RPCS = [
   'https://rpc.mainnet.near.org'
 ];
 
+// Main application page
 app.get('/', (req, res) => {
-  res.send('NEAR Transaction Investigator API is running.');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -22,8 +29,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Transaction lookup
 app.post('/api/transaction', async (req, res) => {
-  const { tx, sender } = req.body;
+  const { tx, sender } = req.body || {};
 
   if (!tx || !sender) {
     return res.status(400).json({
@@ -96,5 +104,7 @@ app.post('/api/transaction', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`NEAR Transaction Investigator running on port ${PORT}`);
+  console.log(
+    `NEAR Transaction Investigator running on port ${PORT}`
+  );
 });
