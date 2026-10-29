@@ -10,46 +10,48 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#090711;--panel:#151020;--line:#332747;--text:#f6f1ff;--muted:#aaa1c2;--purple:#c4b5fd;--pink:#e9a8fa;--green:#a7f3d0;--amber:#fcd38d;--red:#fda4af}
+:root{color-scheme:dark;--bg:#090711;--panel:#151020;--line:#382b50;--text:#f6f1ff;--muted:#aaa1c2;--purple:#c4b5fd;--pink:#e9a8fa;--green:#a7f3d0;--amber:#fcd38d;--red:#fda4af}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 15% 0%,#38205b 0,transparent 40%),radial-gradient(ellipse at 90% 15%,#35143c 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.7 Manrope,system-ui,sans-serif}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% 0%,#38205b 0,transparent 40%),radial-gradient(ellipse at 95% 10%,#35143c 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.7 Manrope,system-ui,sans-serif}
 button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-.shell{width:min(1120px,calc(100% - 32px));margin:auto;padding:24px 0 55px}
-header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:55px}
+button{cursor:pointer;transition:transform .18s,filter .18s,border-color .18s}
+button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+button:disabled{opacity:.55;cursor:wait;transform:none}
+.shell{width:min(1120px,calc(100% - 32px));margin:auto;padding:25px 0 50px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:48px}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#c4b5fd,#e9a8fa);color:#190e29;font-size:23px;font-weight:800}
 .brand-name{font-weight:800;letter-spacing:-.04em}
 .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.13em;text-transform:uppercase}
 .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.language{background:#171126;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px}
-.network{font-size:11px;border:1px solid var(--line);padding:8px 12px;border-radius:99px;color:var(--muted)}
-.hero{text-align:center;max-width:780px;margin:0 auto 34px}
-.eyebrow{text-transform:uppercase;color:var(--purple);font-size:11px;font-weight:800;letter-spacing:.2em}
-h1{font-size:clamp(36px,7vw,66px);line-height:1.08;letter-spacing:-.07em;margin:16px 0}
+select,input,textarea{background:#0b0814;border:1px solid var(--line);border-radius:12px;color:var(--text);padding:12px;width:100%}
+select{width:auto;padding:9px;background:#171126}
+input:focus,textarea:focus,select:focus{outline:2px solid #a78bfa88;outline-offset:2px}
+.network{font-size:10px;border:1px solid var(--line);padding:8px 12px;border-radius:99px;color:var(--muted)}
+.hero{text-align:center;max-width:790px;margin:0 auto 35px}
+.eyebrow{text-transform:uppercase;color:var(--purple);font-size:10px;font-weight:800;letter-spacing:.2em}
+h1{font-size:clamp(36px,7vw,65px);line-height:1.08;letter-spacing:-.07em;margin:16px 0}
 .gradient{background:linear-gradient(100deg,#f5f0ff,#c4b5fd,#f0abfc);color:transparent;background-clip:text}
-.hero p{color:var(--muted);max-width:650px;margin:auto}
+.hero p{color:var(--muted);max-width:660px;margin:auto}
 .workspace{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.panel{background:linear-gradient(145deg,rgba(29,22,46,.96),rgba(15,12,25,.96));border:1px solid var(--line);border-radius:22px;padding:23px;min-width:0;box-shadow:0 20px 60px #0003}
+.panel{background:linear-gradient(145deg,rgba(29,22,46,.96),rgba(15,12,25,.96));border:1px solid var(--line);border-radius:22px;padding:23px;min-width:0;box-shadow:0 20px 60px #0003;transition:border-color .2s,box-shadow .2s}
+.panel:hover{border-color:#8064a8;box-shadow:0 20px 65px #0005,0 0 24px #8b5cf610}
 .panel h2{font-size:17px;margin:0 0 5px}
 .desc{color:var(--muted);font-size:12px;margin:0 0 20px}
 label{display:block;margin:15px 0 7px;font-size:12px;font-weight:700}
-input,textarea{width:100%;background:#0b0814;border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--text);outline:none}
-input:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #a78bfa22}
-textarea{min-height:130px;resize:vertical;font:12px/1.6 "DM Mono",monospace}
+textarea{min-height:125px;resize:vertical;font:12px/1.6 "DM Mono",monospace}
 .hint{font-size:10px;color:var(--muted);margin-top:8px}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-.btn{border:1px solid var(--line);border-radius:12px;padding:11px 15px;font-weight:800;font-size:12px;color:var(--text);background:#ffffff08}
-.btn:hover{border-color:#a78bfa88}
+.btn{border:1px solid var(--line);border-radius:12px;padding:11px 15px;font-weight:800;font-size:11px;color:var(--text);background:#ffffff08}
 .primary{background:linear-gradient(110deg,#c4b5fd,#e9a8fa);color:#190e29;border:0}
-button:disabled{opacity:.6;cursor:wait}
 .results{margin-top:16px}
 .results-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800}
 .pill{font-size:10px;border:1px solid var(--line);border-radius:99px;padding:6px 10px;color:var(--muted)}
 .pill.good{color:var(--green)}.pill.warn{color:var(--amber)}.pill.bad{color:var(--red)}
 .result-title{font-size:clamp(24px,4vw,34px);line-height:1.2;letter-spacing:-.055em;margin:17px 0 10px}
-.summary{color:#d8cfee}
+.summary{color:#ded5ef}
 .confidence{font-size:11px;color:var(--muted);margin-top:10px}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:20px 0}
 .stat{border:1px solid var(--line);background:#ffffff05;border-radius:14px;padding:13px}
@@ -76,7 +78,7 @@ details[open] summary:after{content:"−"}
 .raw{white-space:pre-wrap;overflow-wrap:anywhere;max-height:350px;overflow:auto;padding:13px;background:#08060f;border-radius:10px;font:11px/1.6 "DM Mono",monospace}
 .empty{text-align:center;padding:34px 15px;border:1px dashed var(--line);border-radius:15px;color:var(--muted)}
 footer{text-align:center;color:var(--muted);font-size:10px;margin-top:30px}
-@media(max-width:760px){.workspace{grid-template-columns:1fr}.shell{width:calc(100% - 22px);padding-top:15px}.panel{padding:17px}header{margin-bottom:35px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:22px}}
+@media(max-width:760px){.workspace{grid-template-columns:1fr}.shell{width:calc(100% - 22px);padding-top:15px}header{margin-bottom:35px}.panel{padding:17px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:22px}}
 </style>
 </head>
 <body>
@@ -84,11 +86,11 @@ footer{text-align:center;color:var(--muted);font-size:10px;margin-top:30px}
 <header>
   <div class="brand">
     <div class="logo">N</div>
-    <div><div class="brand-name">NEAR Transaction Investigator</div><div class="brand-sub" data-i18n="brandSub">Blockchain, explained clearly</div></div>
+    <div><div class="brand-name">NEAR Transaction Investigator</div><div class="brand-sub" data-i18n="brandSub"></div></div>
   </div>
   <div class="header-actions">
-    <label for="languageSelect" style="margin:0" data-i18n="languageLabel">Language</label>
-    <select class="language" id="languageSelect" aria-label="Choose language">
+    <label for="languageSelect" style="margin:0" data-i18n="languageLabel"></label>
+    <select id="languageSelect" aria-label="Choose language">
       <option value="en">English</option>
       <option value="es">Español</option>
       <option value="fr">Français</option>
@@ -99,318 +101,319 @@ footer{text-align:center;color:var(--muted);font-size:10px;margin-top:30px}
 </header>
 
 <section class="hero">
-  <div class="eyebrow" data-i18n="eyebrow">Transaction clarity for everyone</div>
-  <h1><span data-i18n="headline1">Understand your</span><br><span class="gradient" data-i18n="headline2">NEAR transactions.</span></h1>
-  <p data-i18n="heroCopy">Paste a transaction hash to find out what happened, what succeeded, what failed, and what you should check next. Technical details remain available whenever you need them.</p>
+  <div class="eyebrow" data-i18n="eyebrow"></div>
+  <h1><span data-i18n="headline1"></span><br><span class="gradient" data-i18n="headline2"></span></h1>
+  <p data-i18n="heroCopy"></p>
 </section>
 
 <div class="workspace">
   <section class="panel">
-    <h2 data-i18n="analyzeTitle">Analyze an RPC error</h2>
-    <p class="desc" data-i18n="analyzeDesc">Paste the error or JSON response you received.</p>
-    <label for="errorInput" data-i18n="errorLabel">Error message or JSON</label>
-    <textarea id="errorInput" placeholder="Paste an RPC error or JSON response here..."></textarea>
+    <h2 data-i18n="analyzeTitle"></h2>
+    <p class="desc" data-i18n="analyzeDesc"></p>
+    <label for="errorInput" data-i18n="errorLabel"></label>
+    <textarea id="errorInput" data-placeholder="errorPlaceholder"></textarea>
     <div class="actions">
-      <button class="btn primary" id="analyzeBtn" data-i18n="analyzeBtn">Analyze error</button>
-      <button class="btn" id="sampleBtn" data-i18n="sampleBtn">Load sample</button>
-      <button class="btn" id="clearBtn" data-i18n="clearBtn">Clear</button>
+      <button class="btn primary" id="analyzeBtn" data-i18n="analyzeBtn"></button>
+      <button class="btn" id="sampleBtn" data-i18n="sampleBtn"></button>
+      <button class="btn" id="clearBtn" data-i18n="clearBtn"></button>
     </div>
   </section>
-
   <section class="panel">
-    <h2 data-i18n="lookupTitle">Investigate a transaction</h2>
-    <p class="desc" data-i18n="lookupDesc">Enter the transaction hash and the sender account ID.</p>
-    <label for="txHash" data-i18n="hashLabel">Transaction hash</label>
+    <h2 data-i18n="lookupTitle"></h2>
+    <p class="desc" data-i18n="lookupDesc"></p>
+    <label for="txHash" data-i18n="hashLabel"></label>
     <input id="txHash" autocomplete="off" placeholder="Transaction hash">
-    <label for="sender" data-i18n="senderLabel">Sender account ID</label>
+    <label for="sender" data-i18n="senderLabel"></label>
     <input id="sender" autocomplete="off" placeholder="example.near">
-    <p class="hint" data-i18n="lookupHint">Older transactions may take longer to retrieve.</p>
-    <div class="actions">
-      <button class="btn primary" id="lookupBtn" data-i18n="lookupBtn">Investigate transaction</button>
-    </div>
+    <p class="hint" data-i18n="lookupHint"></p>
+    <div class="actions"><button class="btn primary" id="lookupBtn" data-i18n="lookupBtn"></button></div>
   </section>
 </div>
 
 <section class="panel results">
-  <div class="results-head">
-    <div class="kicker" data-i18n="reportLabel">Investigation report</div>
-    <span class="pill" id="statusPill" data-i18n="waiting">Waiting for input</span>
-  </div>
-  <div id="result">
-    <div class="empty"><strong data-i18n="emptyTitle">Your report will appear here.</strong><br><span data-i18n="emptyDesc">Run a lookup or analyze an error to begin.</span></div>
-  </div>
+  <div class="results-head"><div class="kicker" data-i18n="reportLabel"></div><span class="pill" id="statusPill"></span></div>
+  <div id="result"></div>
 </section>
-<footer data-i18n="footer">Evidence based transaction analysis. Always verify important financial outcomes independently.</footer>
+<footer data-i18n="footer"></footer>
 </div>
 
 <script>
-(() => {
 "use strict";
-
+(() => {
 const $ = id => document.getElementById(id);
 const result = $("result");
 let language = "en";
 let lastReport = null;
 
-const translations = {
+const T = {
 en:{
-brandSub:"Blockchain, explained clearly",languageLabel:"Language",
-eyebrow:"Transaction clarity for everyone",headline1:"Understand your",headline2:"NEAR transactions.",
-heroCopy:"Paste a transaction hash to find out what happened, what succeeded, what failed, and what you should check next. Technical details remain available whenever you need them.",
-analyzeTitle:"Analyze an RPC error",analyzeDesc:"Paste the error or JSON response you received.",errorLabel:"Error message or JSON",
-analyzeBtn:"Analyze error",sampleBtn:"Load sample",clearBtn:"Clear",
-lookupTitle:"Investigate a transaction",lookupDesc:"Enter the transaction hash and the sender account ID.",
-hashLabel:"Transaction hash",senderLabel:"Sender account ID",lookupHint:"Older transactions may take longer to retrieve.",
-lookupBtn:"Investigate transaction",reportLabel:"Investigation report",waiting:"Waiting for input",
-emptyTitle:"Your report will appear here.",emptyDesc:"Run a lookup or analyze an error to begin.",
-footer:"Evidence based transaction analysis. Always verify important financial outcomes independently.",
-success:"Successful receipts",failed:"Failed receipts",unknown:"Unknown statuses",
-plainTitle:"What this means",what:"What happened",funds:"What happened to your funds",next:"What you should do next",
-recommended:"Recommended next steps",technical:"View technical evidence",original:"View original RPC response",evidence:"evidence items",
-confidence:"Confidence",refund:"Refund evidence found",refundDesc:"A token transfer log records USDT moving from the exchange contract back to the sender account, with a refund memo. This is strong evidence of a refund transfer being recorded. Check the recipient's token transfer history and balance to confirm the funds arrived.",
-slipTitle:"Your swap failed because of slippage",slipWhat:"You attempted to swap one token for another. The exchange contract rejected the trade because the price or exchange conditions did not satisfy the trade's slippage requirements.",
-slipFunds:"The transaction records show that USDT was sent to the exchange. A later receipt records a USDT transfer back to the sender with a refund memo. This is evidence that a refund transfer was recorded, but the account balance should be checked to confirm receipt.",
-slipNext:"Check the sender account's USDT transfer history and balance. If the refund is missing, use the transaction hash to investigate the transfer with a trusted NEAR explorer. Before retrying the swap, review the quoted price and slippage setting.",
-genericWhat:"The report is based on the status fields, logs, and error details returned by the NEAR RPC. These records help show which parts of the transaction completed or failed.",
-genericFunds:"A transaction status alone does not prove whether funds arrived. Look for token transfer records and confirm the recipient's account balance when money or tokens are involved.",
+brandSub:"Blockchain, explained clearly",languageLabel:"Language",eyebrow:"Transaction clarity for everyone",headline1:"Understand your",headline2:"NEAR transactions.",
+heroCopy:"Paste a transaction hash to understand what happened, what succeeded, what failed, and what you should check next.",
+analyzeTitle:"Analyze an RPC error",analyzeDesc:"Paste the error or JSON response you received.",errorLabel:"Error message or JSON",errorPlaceholder:"Paste an RPC error or JSON response here...",
+analyzeBtn:"Analyze error",sampleBtn:"Load sample",clearBtn:"Clear",lookupTitle:"Investigate a transaction",lookupDesc:"Enter the transaction hash and sender account ID.",
+hashLabel:"Transaction hash",senderLabel:"Sender account ID",lookupHint:"Older transactions may take longer to retrieve.",lookupBtn:"Investigate transaction",
+reportLabel:"Investigation report",waiting:"Waiting for input",emptyTitle:"Your report will appear here.",emptyDesc:"Run a lookup or analyze an error to begin.",
+footer:"Evidence based transaction analysis. Verify important financial outcomes independently.",success:"Successful receipts",failed:"Failed receipts",unknown:"Unknown statuses",
+plainTitle:"What this means",what:"What happened",funds:"What happened to your funds",next:"What you should do next",recommended:"Recommended next steps",
+technical:"View technical evidence",original:"View original RPC response",evidence:"evidence items",confidence:"Confidence",
+refund:"Refund transfer recorded",refundDesc:"A receipt log records a USDT transfer from the exchange contract back to the sender account with a refund memo. This is evidence of a recorded transfer, not independent proof of the final balance.",
+slipTitle:"Your swap failed because of slippage",slipWhat:"You tried to exchange one token for another. The exchange contract rejected the trade because its slippage conditions were not satisfied. Slippage describes a change in price or exchange conditions between the quote and execution.",
+slipFunds:"The records show USDT sent to the exchange and a later USDT transfer back to the sender with a refund memo. Check the account's token transfer history and balance to confirm the funds arrived.",
+slipNext:"Check your USDT transfer history and account balance. If the refund is missing, use the transaction hash to inspect the transfer on a trusted NEAR explorer. Review the quoted price and slippage setting before trying again.",
+genericWhat:"The report uses status fields, receipt logs and errors returned by NEAR RPC to explain which parts of the transaction completed or failed.",
+genericFunds:"A transaction status alone does not prove that funds arrived. Check token transfer records and the recipient's account balance when money or tokens are involved.",
 genericNext:"Review the failed receipt and its error. Check successful receipt logs for transfers, then verify important asset movements in a trusted explorer before retrying.",
-lookupMissing:"Enter both the transaction hash and sender account ID.",querying:"Querying RPC providers…",loading:"Retrieving transaction records…",
-lookupFailed:"Transaction lookup unavailable",lookupFailedDesc:"The app could not complete the lookup. This is a retrieval problem and does not prove the transaction failed.",
-rpcError:"The RPC returned an error",rpcErrorDesc:"The provider could not complete this transaction query. This does not prove the transaction failed.",
+lookupMissing:"Enter both the transaction hash and sender account ID.",querying:"Querying RPC providers…",loading:"Retrieving transaction records…",lookupFailed:"Transaction lookup failed",lookupFailedDesc:"The app could not complete the lookup. This does not prove the transaction failed.",
+rpcError:"The RPC returned an error",rpcErrorDesc:"The provider could not complete the query. This does not prove the transaction failed.",
 noResult:"The lookup service returned no transaction result.",badJson:"The lookup service returned an unexpected response.",
-copy:"Copy raw response",copied:"Copied",copyFail:"Copy failed",
-sampleTitle:"Swap rejected by slippage protection",sampleSummary:"The contract rejected a swap because its slippage check failed. Inspect receipt outcomes and verify any refund separately.",
-sampleError:"Example: Smart contract panicked: E68: slippage error",
-noMatch:"No specific error pattern recognized",noMatchDesc:"The app could not match this input to a known error pattern. Inspect the original response before deciding what to change.",
-slippage:"Swap rejected by slippage protection",notObserved:"The node has not observed the transaction",shard:"RPC node does not track the required shard",invalid:"Transaction rejected during validation",timeout:"Transaction status query timed out",
-failedReceipt:"A receipt failed",successReceipt:"A transaction reports success",needsReview:"Transaction outcome needs review",
-topSuccess:"The top level transaction reports success",failedReceiptSentence:"A receipt failed during execution.",refundEvidence:"Refund or transfer wording appears in the receipt logs, but this does not independently prove that funds reached the account.",
-hash:"Transaction hash",sender:"Sender account",http:"RPC HTTP status",topStatus:"Top level status",receiptCount:"Receipt outcomes returned",block:"Transaction block hash",
-lookupConnection:"Check that the app server is online and try again. If the issue persists, inspect the server logs. A lookup failure is not proof of transaction failure.",
-noInput:"Paste an error message or JSON response first.",copyRaw:"Copy raw response"
+copy:"Copy raw response",copied:"Copied",copyFail:"Copy failed",noInput:"Paste an error message or JSON response first.",
+sampleError:"Example: Smart contract panicked: E68: slippage error",noMatch:"No specific error pattern recognized",
+noMatchDesc:"The app could not match this input to a known error pattern. Inspect the original response before deciding what to change.",
+slippage:"Swap rejected by slippage protection",notObserved:"The node has not observed the transaction",shard:"RPC node does not track the required shard",
+invalid:"Transaction rejected during validation",timeout:"Transaction status query timed out",failedReceipt:"A receipt failed",successReceipt:"Transaction execution reports success",needsReview:"Transaction outcome needs review",
+topSuccess:"The top level transaction reports success",hash:"Transaction hash",sender:"Sender account",http:"RPC HTTP status",topStatus:"Top level status",receiptCount:"Receipt outcomes returned",block:"Transaction block hash",
+refundEvidence:"Refund or transfer wording appears in the receipt logs. This is a clue, but does not independently prove that funds reached the account.",
+lookupConnection:"Check that the app server is online and try again. A lookup failure is not proof of transaction failure."
 },
 es:{
-brandSub:"Blockchain, explicado con claridad",languageLabel:"Idioma",eyebrow:"Transacciones claras para todos",headline1:"Comprende tus",headline2:"transacciones NEAR.",
+brandSub:"Blockchain explicado con claridad",languageLabel:"Idioma",eyebrow:"Transacciones claras para todos",headline1:"Comprende tus",headline2:"transacciones NEAR.",
 heroCopy:"Introduce el hash de una transacción para entender qué ocurrió, qué funcionó, qué falló y qué debes comprobar después.",
-analyzeTitle:"Analizar un error RPC",analyzeDesc:"Pega el error o la respuesta JSON.",errorLabel:"Mensaje de error o JSON",analyzeBtn:"Analizar error",sampleBtn:"Cargar ejemplo",clearBtn:"Borrar",
-lookupTitle:"Investigar una transacción",lookupDesc:"Introduce el hash de la transacción y la cuenta remitente.",hashLabel:"Hash de la transacción",senderLabel:"Cuenta remitente",lookupHint:"Las transacciones antiguas pueden tardar más.",
-lookupBtn:"Investigar transacción",reportLabel:"Informe de investigación",waiting:"Esperando datos",emptyTitle:"Aquí aparecerá el informe.",emptyDesc:"Inicia una búsqueda o analiza un error.",
+analyzeTitle:"Analizar un error RPC",analyzeDesc:"Pega el error o la respuesta JSON.",errorLabel:"Mensaje de error o JSON",errorPlaceholder:"Pega aquí el error RPC o la respuesta JSON...",
+analyzeBtn:"Analizar error",sampleBtn:"Cargar ejemplo",clearBtn:"Borrar",lookupTitle:"Investigar una transacción",lookupDesc:"Introduce el hash y la cuenta remitente.",
+hashLabel:"Hash de la transacción",senderLabel:"Cuenta remitente",lookupHint:"Las transacciones antiguas pueden tardar más.",lookupBtn:"Investigar transacción",
+reportLabel:"Informe de investigación",waiting:"Esperando datos",emptyTitle:"Aquí aparecerá el informe.",emptyDesc:"Inicia una búsqueda o analiza un error.",
 footer:"Análisis basado en evidencias. Verifica de forma independiente los resultados financieros importantes.",
-success:"Recepciones correctas",failed:"Recepciones fallidas",unknown:"Estados desconocidos",plainTitle:"Qué significa",what:"Qué ocurrió",funds:"Qué pasó con tus fondos",next:"Qué debes hacer después",
-recommended:"Próximos pasos recomendados",technical:"Ver evidencia técnica",original:"Ver respuesta RPC original",evidence:"elementos de evidencia",confidence:"Confianza",
-refund:"Se encontró evidencia de reembolso",refundDesc:"Un registro indica que se transfirió USDT desde el contrato del intercambio de vuelta a la cuenta remitente, con una nota de reembolso. Comprueba el historial de transferencias y el saldo para confirmar que los fondos llegaron.",
-slipTitle:"El intercambio falló por deslizamiento de precio",slipWhat:"Intentaste intercambiar un token por otro. El contrato rechazó la operación porque el precio o las condiciones no cumplían los límites de deslizamiento permitidos.",
-slipFunds:"Los registros muestran que se enviaron USDT al intercambio. Una recepción posterior registra una transferencia de USDT de vuelta al remitente con una nota de reembolso. Comprueba el saldo para confirmar que se recibió.",
-slipNext:"Comprueba el historial de transferencias de USDT y el saldo de la cuenta remitente. Si falta el reembolso, utiliza el hash en un explorador NEAR de confianza. Revisa el precio y el límite de deslizamiento antes de volver a intentarlo.",
-genericWhat:"El informe utiliza los estados, registros y errores devueltos por NEAR RPC para mostrar qué partes de la transacción funcionaron o fallaron.",
-genericFunds:"El estado de una transacción por sí solo no demuestra que los fondos hayan llegado. Comprueba las transferencias de tokens y el saldo del destinatario.",
-genericNext:"Revisa el error de la recepción fallida. Comprueba los registros de transferencias y verifica los movimientos de activos antes de volver a intentarlo.",
-lookupMissing:"Introduce el hash de la transacción y la cuenta remitente.",querying:"Consultando proveedores RPC…",loading:"Recuperando registros…",
-lookupFailed:"No se pudo consultar la transacción",lookupFailedDesc:"No se completó la consulta. Esto no demuestra que la transacción haya fallado.",
+success:"Recepciones correctas",failed:"Recepciones fallidas",unknown:"Estados desconocidos",plainTitle:"Qué significa",what:"Qué ocurrió",funds:"Qué pasó con tus fondos",next:"Qué debes hacer después",recommended:"Próximos pasos recomendados",
+technical:"Ver evidencia técnica",original:"Ver respuesta RPC original",evidence:"elementos de evidencia",confidence:"Confianza",
+refund:"Transferencia de reembolso registrada",refundDesc:"Un registro muestra una transferencia de USDT desde el contrato de intercambio a la cuenta remitente, con una nota de reembolso. Esto demuestra que se registró una transferencia, no el saldo final.",
+slipTitle:"El intercambio falló por deslizamiento de precio",slipWhat:"Intentaste intercambiar un token por otro. El contrato rechazó la operación porque no se cumplieron las condiciones de deslizamiento. El deslizamiento describe cambios en el precio o las condiciones entre la cotización y la ejecución.",
+slipFunds:"Los registros muestran USDT enviados al intercambio y una transferencia posterior de vuelta al remitente con una nota de reembolso. Comprueba el historial de transferencias y el saldo para confirmar la recepción.",
+slipNext:"Comprueba el historial de USDT y el saldo de la cuenta. Si falta el reembolso, usa el hash en un explorador NEAR de confianza. Revisa el precio y el límite de deslizamiento antes de volver a intentarlo.",
+genericWhat:"El informe utiliza los estados, registros y errores de NEAR RPC para explicar qué partes de la transacción funcionaron o fallaron.",
+genericFunds:"El estado de una transacción no demuestra por sí solo que los fondos hayan llegado. Comprueba las transferencias de tokens y el saldo del destinatario.",
+genericNext:"Revisa el error de la recepción fallida. Comprueba los registros de transferencias y verifica los movimientos en un explorador de confianza.",
+lookupMissing:"Introduce el hash de la transacción y la cuenta remitente.",querying:"Consultando proveedores RPC…",loading:"Recuperando registros…",lookupFailed:"No se pudo consultar la transacción",lookupFailedDesc:"La consulta no se completó. Esto no demuestra que la transacción haya fallado.",
 rpcError:"El RPC devolvió un error",rpcErrorDesc:"El proveedor no pudo completar la consulta. Esto no demuestra que la transacción haya fallado.",
 noResult:"El servicio no devolvió ningún resultado.",badJson:"El servicio devolvió una respuesta inesperada.",
-copy:"Copiar respuesta original",copied:"Copiado",copyFail:"No se pudo copiar",
-sampleTitle:"Intercambio rechazado por deslizamiento",sampleSummary:"El contrato rechazó el intercambio porque falló la comprobación de deslizamiento. Comprueba las recepciones y verifica el reembolso por separado.",
-sampleError:"Ejemplo: error del contrato: E68: slippage error",noMatch:"No se reconoció un patrón de error",noMatchDesc:"No se pudo identificar un patrón conocido. Revisa la respuesta original.",
-slippage:"Intercambio rechazado por deslizamiento",notObserved:"El nodo no ha observado la transacción",shard:"El nodo RPC no sigue el fragmento necesario",invalid:"Transacción rechazada durante la validación",timeout:"La consulta agotó el tiempo",
-failedReceipt:"Una recepción falló",successReceipt:"La transacción informa de éxito",needsReview:"Hay que revisar el resultado",
-topSuccess:"La transacción principal informa de éxito",failedReceiptSentence:"Una recepción falló durante la ejecución.",refundEvidence:"Los registros mencionan una transferencia o reembolso, pero no prueban por sí solos que los fondos llegaran a la cuenta.",
-hash:"Hash de transacción",sender:"Cuenta remitente",http:"Estado HTTP RPC",topStatus:"Estado principal",receiptCount:"Recepciones devueltas",block:"Hash del bloque",
-lookupConnection:"Comprueba que el servidor esté activo y vuelve a intentarlo. Un error de consulta no demuestra que la transacción haya fallado.",noInput:"Pega primero un error o una respuesta JSON.",copyRaw:"Copiar respuesta original"
+copy:"Copiar respuesta original",copied:"Copiado",copyFail:"No se pudo copiar",noInput:"Pega primero un error o una respuesta JSON.",
+sampleError:"Ejemplo: error del contrato: E68: slippage error",noMatch:"No se reconoció un patrón de error",
+noMatchDesc:"No se identificó un patrón conocido. Revisa la respuesta original.",slippage:"Intercambio rechazado por deslizamiento",notObserved:"El nodo no ha observado la transacción",shard:"El nodo RPC no sigue el fragmento necesario",
+invalid:"Transacción rechazada durante la validación",timeout:"La consulta agotó el tiempo",failedReceipt:"Una recepción falló",successReceipt:"La transacción informa de éxito",needsReview:"Hay que revisar el resultado",
+topSuccess:"La transacción principal informa de éxito",hash:"Hash de transacción",sender:"Cuenta remitente",http:"Estado HTTP RPC",topStatus:"Estado principal",receiptCount:"Recepciones devueltas",block:"Hash del bloque",
+refundEvidence:"Los registros mencionan una transferencia o reembolso, pero no prueban por sí solos que los fondos llegaran a la cuenta.",
+lookupConnection:"Comprueba que el servidor esté activo y vuelve a intentarlo. Un error de consulta no demuestra que la transacción haya fallado."
 },
 fr:{
 brandSub:"La blockchain expliquée clairement",languageLabel:"Langue",eyebrow:"Des transactions compréhensibles par tous",headline1:"Comprenez vos",headline2:"transactions NEAR.",
-heroCopy:"Collez le hash d'une transaction pour comprendre ce qui s'est passé, ce qui a réussi, ce qui a échoué et ce qu'il faut vérifier ensuite.",
-analyzeTitle:"Analyser une erreur RPC",analyzeDesc:"Collez l'erreur ou la réponse JSON.",errorLabel:"Message d'erreur ou JSON",analyzeBtn:"Analyser l'erreur",sampleBtn:"Charger un exemple",clearBtn:"Effacer",
-lookupTitle:"Examiner une transaction",lookupDesc:"Saisissez le hash de transaction et le compte expéditeur.",hashLabel:"Hash de transaction",senderLabel:"Compte expéditeur",lookupHint:"Les anciennes transactions peuvent prendre plus de temps.",
-lookupBtn:"Examiner la transaction",reportLabel:"Rapport d'analyse",waiting:"En attente",emptyTitle:"Votre rapport apparaîtra ici.",emptyDesc:"Lancez une recherche ou analysez une erreur.",
+heroCopy:"Collez le hash d'une transaction pour comprendre ce qui s'est passé, ce qui a réussi, ce qui a échoué et ce qu'il faut vérifier.",
+analyzeTitle:"Analyser une erreur RPC",analyzeDesc:"Collez l'erreur ou la réponse JSON.",errorLabel:"Message d'erreur ou JSON",errorPlaceholder:"Collez ici une erreur RPC ou une réponse JSON...",
+analyzeBtn:"Analyser l'erreur",sampleBtn:"Charger un exemple",clearBtn:"Effacer",lookupTitle:"Examiner une transaction",lookupDesc:"Saisissez le hash et le compte expéditeur.",
+hashLabel:"Hash de transaction",senderLabel:"Compte expéditeur",lookupHint:"Les anciennes transactions peuvent prendre plus de temps.",lookupBtn:"Examiner la transaction",
+reportLabel:"Rapport d'analyse",waiting:"En attente",emptyTitle:"Votre rapport apparaîtra ici.",emptyDesc:"Lancez une recherche ou analysez une erreur.",
 footer:"Analyse fondée sur des preuves. Vérifiez indépendamment les résultats financiers importants.",
-success:"Réceptions réussies",failed:"Réceptions échouées",unknown:"États inconnus",plainTitle:"Ce que cela signifie",what:"Ce qui s'est passé",funds:"Ce qu'il est advenu de vos fonds",next:"Que faire ensuite",
-recommended:"Étapes suivantes recommandées",technical:"Voir les preuves techniques",original:"Voir la réponse RPC originale",evidence:"éléments de preuve",confidence:"Niveau de confiance",
-refund:"Indices de remboursement trouvés",refundDesc:"Un journal enregistre un transfert d'USDT du contrat d'échange vers le compte expéditeur, avec une mention de remboursement. Vérifiez l'historique des transferts et le solde pour confirmer la réception.",
-slipTitle:"L'échange a échoué à cause du slippage",slipWhat:"Vous avez tenté d'échanger un jeton contre un autre. Le contrat a rejeté l'opération car le prix ou les conditions ne respectaient pas les limites de slippage.",
-slipFunds:"Les journaux montrent que des USDT ont été envoyés à l'échange. Une réception ultérieure enregistre un transfert d'USDT vers le compte expéditeur avec une mention de remboursement. Vérifiez le solde pour confirmer la réception.",
-slipNext:"Vérifiez l'historique des transferts USDT et le solde du compte expéditeur. Si le remboursement manque, utilisez le hash dans un explorateur NEAR fiable. Vérifiez le prix et le réglage du slippage avant de réessayer.",
-genericWhat:"Le rapport utilise les statuts, journaux et erreurs renvoyés par NEAR RPC pour expliquer quelles parties de la transaction ont réussi ou échoué.",
-genericFunds:"Le statut d'une transaction ne prouve pas à lui seul que les fonds sont arrivés. Vérifiez les transferts de jetons et le solde du destinataire.",
-genericNext:"Examinez l'erreur de la réception échouée. Vérifiez les journaux de transfert et les mouvements d'actifs avant de réessayer.",
-lookupMissing:"Saisissez le hash de transaction et le compte expéditeur.",querying:"Interrogation des fournisseurs RPC…",loading:"Récupération des données…",
-lookupFailed:"Impossible de consulter la transaction",lookupFailedDesc:"La recherche n'a pas abouti. Cela ne prouve pas que la transaction a échoué.",
+success:"Réceptions réussies",failed:"Réceptions échouées",unknown:"États inconnus",plainTitle:"Ce que cela signifie",what:"Ce qui s'est passé",funds:"Ce qu'il est advenu de vos fonds",next:"Que faire ensuite",recommended:"Étapes suivantes recommandées",
+technical:"Voir les preuves techniques",original:"Voir la réponse RPC originale",evidence:"éléments de preuve",confidence:"Niveau de confiance",
+refund:"Transfert de remboursement enregistré",refundDesc:"Un journal enregistre un transfert d'USDT du contrat d'échange vers le compte expéditeur, avec une mention de remboursement. Cela prouve qu'un transfert a été enregistré, pas le solde final.",
+slipTitle:"L'échange a échoué à cause du slippage",slipWhat:"Vous avez tenté d'échanger un jeton contre un autre. Le contrat a rejeté l'opération car les conditions de slippage n'étaient pas respectées. Le slippage désigne une variation du prix ou des conditions entre le devis et l'exécution.",
+slipFunds:"Les journaux montrent des USDT envoyés à l'échange puis un transfert d'USDT vers le compte expéditeur avec une mention de remboursement. Vérifiez l'historique et le solde pour confirmer la réception.",
+slipNext:"Vérifiez l'historique des transferts USDT et le solde. Si le remboursement manque, utilisez le hash dans un explorateur NEAR fiable. Vérifiez le prix et le réglage du slippage avant de réessayer.",
+genericWhat:"Le rapport utilise les statuts, journaux et erreurs de NEAR RPC pour expliquer quelles parties de la transaction ont réussi ou échoué.",
+genericFunds:"Le statut d'une transaction ne prouve pas à lui seul que les fonds sont arrivés. Vérifiez les transferts et le solde du destinataire.",
+genericNext:"Examinez l'erreur de la réception échouée. Vérifiez les journaux de transfert et les mouvements d'actifs dans un explorateur fiable.",
+lookupMissing:"Saisissez le hash de transaction et le compte expéditeur.",querying:"Interrogation des fournisseurs RPC…",loading:"Récupération des données…",lookupFailed:"Impossible de consulter la transaction",lookupFailedDesc:"La recherche n'a pas abouti. Cela ne prouve pas que la transaction a échoué.",
 rpcError:"Le RPC a renvoyé une erreur",rpcErrorDesc:"Le fournisseur n'a pas pu traiter la requête. Cela ne prouve pas un échec de transaction.",
 noResult:"Le service n'a renvoyé aucun résultat.",badJson:"Le service a renvoyé une réponse inattendue.",
-copy:"Copier la réponse brute",copied:"Copié",copyFail:"Échec de la copie",
-sampleTitle:"Échange rejeté à cause du slippage",sampleSummary:"Le contrat a rejeté l'échange car le contrôle du slippage a échoué. Vérifiez les réceptions et le remboursement séparément.",
-sampleError:"Exemple : erreur du contrat : E68: slippage error",noMatch:"Aucun type d'erreur reconnu",noMatchDesc:"Aucun motif connu n'a été identifié. Examinez la réponse originale.",
-slippage:"Échange rejeté à cause du slippage",notObserved:"Le nœud n'a pas observé la transaction",shard:"Le nœud RPC ne suit pas le shard requis",invalid:"Transaction rejetée lors de la validation",timeout:"Délai de recherche dépassé",
-failedReceipt:"Une réception a échoué",successReceipt:"La transaction est signalée comme réussie",needsReview:"Le résultat doit être vérifié",
-topSuccess:"La transaction principale est signalée comme réussie",failedReceiptSentence:"Une réception a échoué pendant l'exécution.",refundEvidence:"Les journaux mentionnent un transfert ou un remboursement, sans prouver à eux seuls que les fonds ont atteint le compte.",
-hash:"Hash de transaction",sender:"Compte expéditeur",http:"Statut HTTP RPC",topStatus:"Statut principal",receiptCount:"Réceptions renvoyées",block:"Hash du bloc",
-lookupConnection:"Vérifiez que le serveur est actif et réessayez. Un échec de recherche ne prouve pas un échec de transaction.",noInput:"Collez d'abord une erreur ou une réponse JSON.",copyRaw:"Copier la réponse brute"
+copy:"Copier la réponse brute",copied:"Copié",copyFail:"Échec de la copie",noInput:"Collez d'abord une erreur ou une réponse JSON.",
+sampleError:"Exemple : erreur du contrat : E68: slippage error",noMatch:"Aucun type d'erreur reconnu",
+noMatchDesc:"Aucun motif connu n'a été identifié. Examinez la réponse originale.",slippage:"Échange rejeté à cause du slippage",notObserved:"Le nœud n'a pas observé la transaction",shard:"Le nœud RPC ne suit pas le shard requis",
+invalid:"Transaction rejetée lors de la validation",timeout:"Délai de recherche dépassé",failedReceipt:"Une réception a échoué",successReceipt:"La transaction est signalée comme réussie",needsReview:"Le résultat doit être vérifié",
+topSuccess:"La transaction principale est signalée comme réussie",hash:"Hash de transaction",sender:"Compte expéditeur",http:"Statut HTTP RPC",topStatus:"Statut principal",receiptCount:"Réceptions renvoyées",block:"Hash du bloc",
+refundEvidence:"Les journaux mentionnent un transfert ou un remboursement sans prouver à eux seuls que les fonds ont atteint le compte.",
+lookupConnection:"Vérifiez que le serveur est actif et réessayez. Un échec de recherche ne prouve pas un échec de transaction."
 },
 pt:{
 brandSub:"Blockchain explicada com clareza",languageLabel:"Idioma",eyebrow:"Transações claras para todos",headline1:"Entenda suas",headline2:"transações NEAR.",
-heroCopy:"Cole o hash de uma transação para descobrir o que aconteceu, o que funcionou, o que falhou e o que verificar em seguida.",
-analyzeTitle:"Analisar um erro RPC",analyzeDesc:"Cole a mensagem de erro ou a resposta JSON.",errorLabel:"Mensagem de erro ou JSON",analyzeBtn:"Analisar erro",sampleBtn:"Carregar exemplo",clearBtn:"Limpar",
-lookupTitle:"Investigar uma transação",lookupDesc:"Informe o hash da transação e a conta remetente.",hashLabel:"Hash da transação",senderLabel:"Conta remetente",lookupHint:"Transações antigas podem demorar mais.",
-lookupBtn:"Investigar transação",reportLabel:"Relatório da investigação",waiting:"Aguardando dados",emptyTitle:"Seu relatório aparecerá aqui.",emptyDesc:"Faça uma consulta ou analise um erro.",
+heroCopy:"Cole o hash de uma transação para entender o que aconteceu, o que funcionou, o que falhou e o que verificar em seguida.",
+analyzeTitle:"Analisar um erro RPC",analyzeDesc:"Cole a mensagem de erro ou a resposta JSON.",errorLabel:"Mensagem de erro ou JSON",errorPlaceholder:"Cole aqui o erro RPC ou a resposta JSON...",
+analyzeBtn:"Analisar erro",sampleBtn:"Carregar exemplo",clearBtn:"Limpar",lookupTitle:"Investigar uma transação",lookupDesc:"Informe o hash da transação e a conta remetente.",
+hashLabel:"Hash da transação",senderLabel:"Conta remetente",lookupHint:"Transações antigas podem demorar mais.",lookupBtn:"Investigar transação",
+reportLabel:"Relatório da investigação",waiting:"Aguardando dados",emptyTitle:"Seu relatório aparecerá aqui.",emptyDesc:"Faça uma consulta ou analise um erro.",
 footer:"Análise baseada em evidências. Verifique independentemente resultados financeiros importantes.",
-success:"Recibos bem sucedidos",failed:"Recibos com falha",unknown:"Status desconhecidos",plainTitle:"O que isso significa",what:"O que aconteceu",funds:"O que aconteceu com seus fundos",next:"O que fazer agora",
-recommended:"Próximas etapas recomendadas",technical:"Ver evidências técnicas",original:"Ver resposta RPC original",evidence:"itens de evidência",confidence:"Confiança",
-refund:"Há evidência de reembolso",refundDesc:"Um registro indica uma transferência de USDT do contrato de troca de volta para a conta remetente, com uma observação de reembolso. Confira o histórico de transferências e o saldo para confirmar o recebimento.",
-slipTitle:"A troca falhou devido à slippage",slipWhat:"Você tentou trocar um token por outro. O contrato rejeitou a operação porque o preço ou as condições não respeitaram os limites de slippage.",
-slipFunds:"Os registros mostram que USDT foi enviado à exchange. Um recibo posterior registra uma transferência de USDT de volta para a conta remetente com uma observação de reembolso. Confira o saldo para confirmar o recebimento.",
-slipNext:"Confira o histórico de transferências de USDT e o saldo da conta remetente. Se o reembolso não aparecer, use o hash em um explorador NEAR confiável. Revise o preço e a configuração de slippage antes de tentar novamente.",
+success:"Recibos bem sucedidos",failed:"Recibos com falha",unknown:"Status desconhecidos",plainTitle:"O que isso significa",what:"O que aconteceu",funds:"O que aconteceu com seus fundos",next:"O que fazer agora",recommended:"Próximas etapas recomendadas",
+technical:"Ver evidências técnicas",original:"Ver resposta RPC original",evidence:"itens de evidência",confidence:"Confiança",
+refund:"Transferência de reembolso registrada",refundDesc:"Um registro mostra uma transferência de USDT do contrato de troca de volta para a conta remetente, com uma observação de reembolso. Isso indica um registro de transferência, mas não confirma o saldo final.",
+slipTitle:"A troca falhou devido à slippage",slipWhat:"Você tentou trocar um token por outro. O contrato rejeitou a operação porque as condições de slippage não foram atendidas. Slippage descreve uma mudança de preço ou condições entre a cotação e a execução.",
+slipFunds:"Os registros mostram USDT enviado à exchange e uma transferência posterior de volta para a conta remetente com uma observação de reembolso. Confira o histórico e o saldo para confirmar o recebimento.",
+slipNext:"Confira o histórico de transferências de USDT e o saldo. Se o reembolso não aparecer, use o hash em um explorador NEAR confiável. Revise o preço e a configuração de slippage antes de tentar novamente.",
 genericWhat:"O relatório usa os status, registros e erros retornados pelo NEAR RPC para explicar quais partes da transação foram concluídas ou falharam.",
 genericFunds:"O status de uma transação, sozinho, não prova que os fundos chegaram. Confira as transferências de tokens e o saldo do destinatário.",
-genericNext:"Revise o erro do recibo com falha. Confira os registros de transferência e verifique movimentações de ativos antes de tentar novamente.",
-lookupMissing:"Informe o hash da transação e a conta remetente.",querying:"Consultando provedores RPC…",loading:"Obtendo registros da transação…",
-lookupFailed:"Não foi possível consultar a transação",lookupFailedDesc:"A consulta não foi concluída. Isso não prova que a transação falhou.",
+genericNext:"Revise o erro do recibo com falha. Confira os registros de transferência e verifique as movimentações em um explorador confiável.",
+lookupMissing:"Informe o hash da transação e a conta remetente.",querying:"Consultando provedores RPC…",loading:"Obtendo registros da transação…",lookupFailed:"Não foi possível consultar a transação",lookupFailedDesc:"A consulta não foi concluída. Isso não prova que a transação falhou.",
 rpcError:"O RPC retornou um erro",rpcErrorDesc:"O provedor não conseguiu concluir a consulta. Isso não prova que a transação falhou.",
 noResult:"O serviço não retornou nenhum resultado.",badJson:"O serviço retornou uma resposta inesperada.",
-copy:"Copiar resposta original",copied:"Copiado",copyFail:"Falha ao copiar",
-sampleTitle:"Troca rejeitada por proteção contra slippage",sampleSummary:"O contrato rejeitou a troca porque a verificação de slippage falhou. Confira os recibos e verifique o reembolso separadamente.",
-sampleError:"Exemplo: erro do contrato: E68: slippage error",noMatch:"Nenhum padrão de erro reconhecido",noMatchDesc:"Não foi possível identificar um padrão conhecido. Confira a resposta original.",
-slippage:"Troca rejeitada por slippage",notObserved:"O nó não observou a transação",shard:"O nó RPC não acompanha o shard necessário",invalid:"Transação rejeitada durante a validação",timeout:"A consulta expirou",
-failedReceipt:"Um recibo falhou",successReceipt:"A transação informa sucesso",needsReview:"O resultado precisa ser verificado",
-topSuccess:"A transação principal informa sucesso",failedReceiptSentence:"Um recibo falhou durante a execução.",refundEvidence:"Os registros mencionam transferência ou reembolso, mas isso não prova por si só que os fundos chegaram à conta.",
-hash:"Hash da transação",sender:"Conta remetente",http:"Status HTTP RPC",topStatus:"Status principal",receiptCount:"Recibos retornados",block:"Hash do bloco",
-lookupConnection:"Confira se o servidor está ativo e tente novamente. Uma falha na consulta não prova que a transação falhou.",noInput:"Cole primeiro uma mensagem de erro ou resposta JSON.",copyRaw:"Copiar resposta original"
+copy:"Copiar resposta original",copied:"Copiado",copyFail:"Falha ao copiar",noInput:"Cole primeiro uma mensagem de erro ou resposta JSON.",
+sampleError:"Exemplo: erro do contrato: E68: slippage error",noMatch:"Nenhum padrão de erro reconhecido",
+noMatchDesc:"Não foi possível identificar um padrão conhecido. Confira a resposta original.",slippage:"Troca rejeitada por slippage",notObserved:"O nó não observou a transação",shard:"O nó RPC não acompanha o shard necessário",
+invalid:"Transação rejeitada durante a validação",timeout:"A consulta expirou",failedReceipt:"Um recibo falhou",successReceipt:"A transação informa sucesso",needsReview:"O resultado precisa ser verificado",
+topSuccess:"A transação principal informa sucesso",hash:"Hash da transação",sender:"Conta remetente",http:"Status HTTP RPC",topStatus:"Status principal",receiptCount:"Recibos retornados",block:"Hash do bloco",
+refundEvidence:"Os registros mencionam transferência ou reembolso, mas isso não prova por si só que os fundos chegaram à conta.",
+lookupConnection:"Confira se o servidor está ativo e tente novamente. Uma falha na consulta não prova que a transação falhou."
 }
 };
 
-function t(key){return (translations[language]&&translations[language][key])||translations.en[key]||key}
+function t(key){return (T[language]&&T[language][key])||T.en[key]||key}
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function setPill(text,tone=""){const p=$("statusPill");p.textContent=text;p.className="pill "+tone}
 function setLanguage(lang){
- language=translations[lang]?lang:"en";
+ language=T[lang]?lang:"en";
  document.documentElement.lang=language;
  $("languageSelect").value=language;
- document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(t(key))el.textContent=t(key)});
- $("errorInput").placeholder=t("sampleError");
- $("txHash").placeholder=t("hashLabel");
- $("sender").placeholder="example.near";
+ document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+ document.querySelectorAll("[data-placeholder]").forEach(el=>el.placeholder=t(el.dataset.placeholder));
  if(lastReport)render(lastReport);
 }
-function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function setPill(text,tone=""){const pill=$("statusPill");pill.textContent=text;pill.className="pill "+tone}
 function flatten(value,prefix="",out=[]){
  if(value&&typeof value==="object"){for(const [k,v] of Object.entries(value))flatten(v,prefix?prefix+"."+k:k,out)}
  else out.push([prefix,String(value)]);
- return out
+ return out;
 }
 function has(status,key){return !!status&&Object.prototype.hasOwnProperty.call(status,key)}
+function statusOf(receipt){return receipt?.outcome?.status||{}}
+function isSuccess(status){return has(status,"SuccessValue")||has(status,"SuccessReceiptId")}
+function isFailure(status){return has(status,"Failure")}
+function collectText(value,out=[]){
+ if(typeof value==="string")out.push(value);
+ else if(Array.isArray(value))value.forEach(v=>collectText(v,out));
+ else if(value&&typeof value==="object")Object.values(value).forEach(v=>collectText(v,out));
+ return out;
+}
 function classifyTxResult(data,hash,sender,httpStatus){
  const r=data.result||{};
  const receipts=Array.isArray(r.receipts_outcome)?r.receipts_outcome:[];
- const topStatus=r.status||r.transaction_outcome?.outcome?.status||{};
- const txSucceeded=has(topStatus,"SuccessValue")||has(topStatus,"SuccessReceiptId");
- const txFailed=has(topStatus,"Failure");
- const statusOf=x=>x?.outcome?.status||{};
- const failed=receipts.filter(x=>has(statusOf(x),"Failure"));
- const successful=receipts.filter(x=>has(statusOf(x),"SuccessValue")||has(statusOf(x),"SuccessReceiptId"));
- const unknown=receipts.filter(x=>!["Failure","SuccessValue","SuccessReceiptId"].some(k=>has(statusOf(x),k)));
- const failures=failed.map(x=>JSON.stringify(x.outcome.status.Failure));
- const logs=receipts.flatMap(x=>(x.outcome?.logs||[]).map(log=>({receiver:x.outcome?.executor_id||"",log})));
- const allLogs=logs.map(x=>x.log).join("\n");
- const failureText=failures.join("\n");
- const slippage=/slippage|E68/i.test(allLogs+" "+failureText);
- const refundLogs=logs.filter(x=>/refund/i.test(x.log)&&/ft_transfer/i.test(x.log));
- const senderMatches=refundLogs.some(x=>x.log.includes(sender)||x.log.includes("new_owner_id"));
- const refundRecorded=refundLogs.length>0&&senderMatches;
+ const txStatus=r.status||r.transaction_outcome?.outcome?.status||{};
+ const failed=receipts.filter(x=>isFailure(statusOf(x)));
+ const successful=receipts.filter(x=>isSuccess(statusOf(x)));
+ const unknown=receipts.filter(x=>!isFailure(statusOf(x))&&!isSuccess(statusOf(x)));
+ const txSucceeded=isSuccess(txStatus);
+ const failureText=collectText(failed.map(x=>statusOf(x).Failure||"")).join(" ");
+ const allLogs=receipts.flatMap(x=>x.outcome?.logs||[]);
+ const allText=collectText([failureText,allLogs]).join(" ");
+ const slippage=/slippage|E68/i.test(allText);
+ const refundLogs=allLogs.filter(log=>/ft_transfer/i.test(log)&&/refund/i.test(log));
+ const refundRecorded=refundLogs.some(log=>log.includes(sender));
  const facts=[
-  `Transaction hash: ${hash}`,
-  `Sender account: ${sender}`,
-  `RPC HTTP status: ${httpStatus}`,
-  `Top level transaction status: ${JSON.stringify(topStatus)}`,
-  `Transaction block hash: ${r.transaction_outcome?.block_hash||"Not returned"}`,
-  `Receipt outcomes returned: ${receipts.length}`,
-  `Successful receipts detected: ${successful.length}`,
-  `Failed receipts detected: ${failed.length}`,
-  `Receipt outcomes with unrecognized status: ${unknown.length}`
+  `${t("hash")}: ${hash}`,
+  `${t("sender")}: ${sender}`,
+  `${t("http")}: ${httpStatus}`,
+  `${t("topStatus")}: ${JSON.stringify(txStatus)}`,
+  `${t("block")}: ${r.transaction_outcome?.block_hash||"Not returned"}`,
+  `${t("receiptCount")}: ${receipts.length}`,
+  `${t("success")}: ${successful.length}`,
+  `${t("failed")}: ${failed.length}`,
+  `${t("unknown")}: ${unknown.length}`
  ];
  receipts.forEach((receipt,i)=>{
-  const outcome=receipt.outcome||{};
-  const st=outcome.status||{};
-  const label=has(st,"Failure")?"FAILED":(has(st,"SuccessValue")||has(st,"SuccessReceiptId"))?"SUCCESS":"UNKNOWN";
+  const o=receipt.outcome||{},s=o.status||{};
+  const label=isFailure(s)?"FAILED":isSuccess(s)?"SUCCESS":"UNKNOWN";
   facts.push(`Receipt ${i+1} status: ${label} (${receipt.id||"ID unavailable"})`);
-  facts.push(`Receipt ${i+1} executor or receiver: ${outcome.executor_id||"Not returned"}`);
-  if(has(st,"Failure"))facts.push(`Receipt ${i+1} failure detail: ${JSON.stringify(st.Failure)}`);
-  (outcome.logs||[]).filter(x=>/refund|transfer|slippage|panic|error|fail|swapped/i.test(x)).slice(0,4).forEach(log=>facts.push(`Receipt ${i+1} relevant log: ${log}`));
+  facts.push(`Receipt ${i+1} executor: ${o.executor_id||receipt.receiver_id||"Not returned"}`);
+  if(isFailure(s))facts.push(`Receipt ${i+1} failure: ${JSON.stringify(s.Failure)}`);
+  (o.logs||[]).filter(log=>/refund|transfer|slippage|panic|error|fail/i.test(log)).slice(0,4).forEach(log=>facts.push(`Receipt ${i+1} log: ${log}`));
  });
- facts.push(refundRecorded?t("refundDesc"):t("refundEvidence"));
  const report={
-  title:failed.length?(txSucceeded?"Transaction reports success, but a receipt failed":"A receipt failed during execution"):txFailed?"Transaction execution reported a failure":txSucceeded?"Transaction execution reported success":"Transaction outcome needs review",
-  tone:failed.length||txFailed?"bad":txSucceeded?"good":"warn",
-  summary:failed.length?`The top level transaction status is ${txSucceeded?"successful":"not confirmed as successful"}, but ${failed.length} receipt(s) failed. ${successful.length} receipt(s) succeeded. Review the failed action and any later transfers to understand the final outcome.`:txSucceeded?`The transaction reports success, and ${successful.length} successful receipt(s) were found. This confirms the returned execution statuses, not necessarily every financial outcome.`:"The available status fields do not provide enough information to confirm the final transaction outcome.",
-  confidence:"Based on the status fields and logs returned by the RPC. Financial outcomes should be checked separately.",
-  facts,raw:JSON.stringify(data,null,2),failedCount:failed.length,successCount:successful.length,unknownCount:unknown.length,slippage,refundRecorded
+  kind:"transaction",hash,sender,raw:JSON.stringify(data,null,2),facts,
+  failedCount:failed.length,successCount:successful.length,unknownCount:unknown.length,
+  slippage,refundRecorded,tone:failed.length?"bad":txSucceeded?"good":"warn"
  };
- return report
+ if(slippage){
+  report.title=t("slipTitle");
+  report.summary=t("slipWhat");
+ }else if(failed.length){
+  report.title=t("failedReceipt");
+  report.summary=`${failed.length} receipt(s) failed and ${successful.length} succeeded. The top level status alone does not explain the final movement of funds.`;
+ }else if(txSucceeded){
+  report.title=t("successReceipt");
+  report.summary=`${successful.length} successful receipt(s) were found. Check transfer records if you need to confirm a token movement.`;
+ }else{
+  report.title=t("needsReview");
+  report.summary=t("genericWhat");
+ }
+ return report;
 }
-function analyzeError(input){
+function diagnose(input){
  let parsed=null;try{parsed=JSON.parse(input)}catch{}
  const flat=parsed?flatten(parsed):[];
- const text=(input+"\n"+flat.map(x=>x.join(" ")).join("\n")).toLowerCase();
- const facts=flat.slice(0,15).map(([k,v])=>`${k}: ${v}`);
- if(/slippage|e68/.test(text))return {title:t("slippage"),summary:t("sampleSummary"),tone:"bad",confidence:"High for the meaning of the reported error.",plainKind:"slippage",facts:["A slippage error was detected.",...facts],actions:[t("slipNext")],raw:parsed?JSON.stringify(parsed,null,2):input};
- if(/not_observed/.test(text))return {title:t("notObserved"),summary:"The queried node did not observe the transaction during its tracking window. This does not prove permanent failure.",tone:"warn",confidence:"Transaction outcome not established.",facts:["The response includes NOT_OBSERVED.",...facts],actions:[t("lookupConnection")],raw:parsed?JSON.stringify(parsed,null,2):input};
- if(/does_not_track_shard/.test(text))return {title:t("shard"),summary:"The RPC provider may not track the shard needed for this query. This may be a provider limitation, not a transaction failure.",tone:"warn",confidence:"Based on the RPC error.",facts,...actions:[t("lookupConnection")],raw:parsed?JSON.stringify(parsed,null,2):input};
- if(/invalid_transaction|invalid transaction/.test(text))return {title:t("invalid"),summary:"The response indicates that the transaction did not pass validation. Inspect the nested error to find the exact cause.",tone:"bad",confidence:"The specific cause depends on the nested error.",facts,actions:[t("genericNext")],raw:parsed?JSON.stringify(parsed,null,2):input};
- if(/timeout|timed out/.test(text))return {title:t("timeout"),summary:"The query timed out. A timeout does not prove that the transaction failed.",tone:"warn",confidence:"The final transaction outcome remains unknown.",facts,actions:[t("lookupConnection")],raw:parsed?JSON.stringify(parsed,null,2):input};
- return {title:t("noMatch"),summary:t("noMatchDesc"),tone:"warn",confidence:"Low. No known error pattern was identified.",facts: facts.length?facts:["No diagnosis rule matched the provided text."],actions:[t("genericNext")],raw:parsed?JSON.stringify(parsed,null,2):input}
+ const text=(input+" "+flat.map(x=>x.join(" ")).join(" ")).toLowerCase();
+ let report={kind:"error",title:t("noMatch"),summary:t("noMatchDesc"),tone:"warn",facts:flat.slice(0,15).map(([k,v])=>`${k}: ${v}`),raw:parsed?JSON.stringify(parsed,null,2):input,actions:[t("genericNext")]};
+ if(/slippage|e68/.test(text)){
+  report.title=t("slippage");report.summary=t("slipWhat");report.tone="bad";report.slippage=true;
+ }else if(/not_observed/.test(text)){
+  report.title=t("notObserved");report.summary=t("lookupConnection");
+ }else if(/does_not_track_shard/.test(text)){
+  report.title=t("shard");report.summary=t("lookupConnection");
+ }else if(/invalid_transaction|invalid transaction/.test(text)){
+  report.title=t("invalid");report.summary=t("genericNext");report.tone="bad";
+ }else if(/timeout|timed out/.test(text)){
+  report.title=t("timeout");report.summary=t("lookupConnection");
+ }
+ if(!report.facts.length)report.facts=["No specific structured error fields were found."];
+ return report;
 }
 function render(report){
  lastReport=report;
+ const tx=report.kind==="transaction";
  const facts=report.facts||[];
- const failed=report.failedCount??0,success=report.successCount??0,unknown=report.unknownCount??0;
- const isTransaction=!!report.raw&&facts.some(x=>x.startsWith("Transaction hash:"));
- let plainWhat=t("genericWhat"),plainFunds=t("genericFunds"),plainNext=t("genericNext");
- if(report.slippage||report.plainKind==="slippage"){plainWhat=t("slipWhat");plainFunds=report.refundRecorded?t("slipFunds"):t("genericFunds");plainNext=t("slipNext")}
- const stats=isTransaction?`<div class="stats"><div class="stat"><span>${esc(t("success"))}</span><strong>${success}</strong></div><div class="stat"><span>${esc(t("failed"))}</span><strong>${failed}</strong></div><div class="stat"><span>${esc(t("unknown"))}</span><strong>${unknown}</strong></div></div>`:"";
- const plain=isTransaction||report.plainKind?`<section class="plain"><h3>${esc(t("plainTitle"))}</h3><article><strong>${esc(t("what"))}</strong><p>${esc(plainWhat)}</p></article><article><strong>${esc(t("funds"))}</strong><p>${esc(plainFunds)}</p></article><article><strong>${esc(t("next"))}</strong><p>${esc(plainNext)}</p></article></section>`:"";
- const refund=isTransaction&&report.refundRecorded?`<div class="refund"><strong>${esc(t("refund"))}</strong><p>${esc(t("refundDesc"))}</p></div>`:"";
- const actions=(report.actions||[]).map(x=>`<li>${esc(x)}</li>`).join("");
- result.innerHTML=`<div class="result-title">${esc(report.title)}</div><div class="summary">${esc(report.summary||"")}</div><div class="confidence">${esc(t("confidence"))}: ${esc(report.confidence||"")}</div>${stats}${plain}${refund}<div class="section"><h3>${esc(t("recommended"))}</h3><ul class="evidence">${actions||`<li>${esc(t("genericNext"))}</li>`}</ul></div><details><summary>${esc(t("technical"))}<span>${facts.length} ${esc(t("evidence"))}</span></summary><div class="details-body"><ul class="evidence">${facts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></details><details><summary>${esc(t("original"))}</summary><div class="details-body"><div class="raw">${esc(report.raw||"No original response available.")}</div><div class="actions"><button class="btn" id="copyBtn">${esc(t("copy"))}</button></div></div></details>`;
+ const plainWhat=report.slippage?t("slipWhat"):t("genericWhat");
+ const plainFunds=report.refundRecorded?t("slipFunds"):t("genericFunds");
+ const plainNext=report.slippage?t("slipNext"):t("genericNext");
+ const stats=tx?`<div class="stats"><div class="stat"><span>${esc(t("success"))}</span><strong>${report.successCount}</strong></div><div class="stat"><span>${esc(t("failed"))}</span><strong>${report.failedCount}</strong></div><div class="stat"><span>${esc(t("unknown"))}</span><strong>${report.unknownCount}</strong></div></div>`:"";
+ const plain=tx||report.slippage?`<section class="plain"><h3>${esc(t("plainTitle"))}</h3><article><strong>${esc(t("what"))}</strong><p>${esc(plainWhat)}</p></article><article><strong>${esc(t("funds"))}</strong><p>${esc(plainFunds)}</p></article><article><strong>${esc(t("next"))}</strong><p>${esc(plainNext)}</p></article></section>`:"";
+ const refund=tx&&report.refundRecorded?`<div class="refund"><strong>${esc(t("refund"))}</strong><p>${esc(t("refundDesc"))}</p></div>`:"";
+ const actions=(report.actions||[plainNext]).map(x=>`<li>${esc(x)}</li>`).join("");
+ result.innerHTML=`<div class="result-title">${esc(report.title)}</div><div class="summary">${esc(report.summary||"")}</div><div class="confidence">${esc(t("confidence"))}: ${esc(report.confidence||"Based on the RPC response and receipt logs. Verify financial outcomes separately.")}</div>${stats}${plain}${refund}<div class="section"><h3>${esc(t("recommended"))}</h3><ul class="evidence">${actions}</ul></div><details><summary>${esc(t("technical"))}<span>${facts.length} ${esc(t("evidence"))}</span></summary><div class="details-body"><ul class="evidence">${facts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></details><details><summary>${esc(t("original"))}</summary><div class="details-body"><div class="raw">${esc(report.raw||"No raw response available.")}</div><div class="actions"><button class="btn" id="copyBtn">${esc(t("copy"))}</button></div></div></details>`;
  setPill(report.title,report.tone||"");
- const copyBtn=$("copyBtn");
- if(copyBtn)copyBtn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report.raw||"");copyBtn.textContent=t("copied")}catch{copyBtn.textContent=t("copyFail")}});
+ const copy=$("copyBtn");
+ if(copy)copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report.raw||"");copy.textContent=t("copied")}catch{copy.textContent=t("copyFail")}});
 }
+function showEmpty(){result.innerHTML=`<div class="empty"><strong>${esc(t("emptyTitle"))}</strong><br>${esc(t("emptyDesc"))}</div>`;setPill(t("waiting"))}
+
 $("languageSelect").addEventListener("change",e=>setLanguage(e.target.value));
 $("analyzeBtn").addEventListener("click",()=>{
  const input=$("errorInput").value.trim();
- if(!input){render({title:t("noInput"),summary:t("noMatchDesc"),tone:"warn",facts:[],actions:[t("noInput")],raw:""});return}
- render(analyzeError(input))
+ if(!input){render({title:t("noInput"),summary:t("noInput"),tone:"warn",facts:[],actions:[t("noInput")],raw:""});return}
+ render(diagnose(input));
 });
 $("sampleBtn").addEventListener("click",()=>{
  const sample='{"error":{"cause":{"name":"SmartContractPanic","info":{"panic_msg":"E68: slippage error"}}}}';
  $("errorInput").value=sample;
- render(analyzeError(sample))
+ render(diagnose(sample));
 });
-$("clearBtn").addEventListener("click",()=>{
- $("errorInput").value="";
- lastReport=null;
- result.innerHTML=`<div class="empty"><strong>${esc(t("emptyTitle"))}</strong><br>${esc(t("emptyDesc"))}</div>`;
- setPill(t("waiting"))
-});
+$("clearBtn").addEventListener("click",()=>{$("errorInput").value="";lastReport=null;showEmpty()});
 $("lookupBtn").addEventListener("click",async()=>{
  const hash=$("txHash").value.trim(),sender=$("sender").value.trim(),button=$("lookupBtn");
  if(!hash||!sender){render({title:t("lookupMissing"),summary:t("lookupMissing"),tone:"warn",facts:[],actions:[t("lookupMissing")],raw:""});return}
  button.disabled=true;button.textContent=t("querying");setPill(t("querying"),"warn");
  result.innerHTML=`<div class="empty">${esc(t("loading"))}</div>`;
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),65000);
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),65000);
  try{
   const response=await fetch("/api/rpc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({method:"tx",params:[hash,sender]}),signal:controller.signal});
-  const body=await response.text();let data;
-  try{data=JSON.parse(body)}catch{throw new Error(t("badJson"))}
+  const body=await response.text();
+  let data;try{data=JSON.parse(body)}catch{throw new Error(t("badJson"))}
   if(!response.ok)throw new Error(data.error||t("lookupFailedDesc"));
-  if(data.error){render({title:t("rpcError"),summary:t("rpcErrorDesc"),tone:"warn",confidence:t("confidence"),facts:[JSON.stringify(data.error)],actions:[t("genericNext")],raw:JSON.stringify(data,null,2)});return}
+  if(data.error){render({title:t("rpcError"),summary:t("rpcErrorDesc"),tone:"warn",facts:[JSON.stringify(data.error)],actions:[t("lookupConnection")],raw:JSON.stringify(data,null,2)});return}
   if(!data.result)throw new Error(t("noResult"));
   render(classifyTxResult(data,hash,sender,response.status));
  }catch(error){
-  render({title:t("lookupFailed"),summary:t("lookupFailedDesc"),tone:"warn",confidence:t("confidence"),facts:[String(error.message||error)],actions:[t("lookupConnection")],raw:String(error.stack||error)});
- }finally{clearTimeout(timer);button.disabled=false;button.textContent=t("lookupBtn")}
+  render({title:t("lookupFailed"),summary:t("lookupFailedDesc"),tone:"warn",facts:[String(error.message||error)],actions:[t("lookupConnection")],raw:String(error.stack||error)});
+ }finally{
+  clearTimeout(timer);button.disabled=false;button.textContent=t("lookupBtn");
+ }
 });
-const browserLanguage=(navigator.languages&&navigator.languages[0]||navigator.language||"en").toLowerCase();
-const detected=browserLanguage.startsWith("es")?"es":browserLanguage.startsWith("fr")?"fr":browserLanguage.startsWith("pt")?"pt":"en";
+const browserLang=(navigator.languages?.[0]||navigator.language||"en").toLowerCase();
+const detected=browserLang.startsWith("es")?"es":browserLang.startsWith("fr")?"fr":browserLang.startsWith("pt")?"pt":"en";
 setLanguage(detected);
+showEmpty();
 })();
 </script>
 </body>
