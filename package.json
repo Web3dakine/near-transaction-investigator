@@ -1,8 +1,16 @@
+
 {
   "name": "near-transaction-investigator",
   "version": "0.5.0",
   "private": true,
   "description": "Beginner-friendly NEAR transaction lookup prototype with a server-side RPC proxy",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=18" }
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
