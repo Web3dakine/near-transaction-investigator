@@ -117,15 +117,6 @@ function classifyTxResult(data, hash, sender, httpStatus) {
   const explicitRefundClues = receiptDetails.filter(item =>
     /\brefund(?:ed)?\b|\breturn(?:ed)? funds\b|\btransfer(?:red)?\b/i.test(item.text)
   );
-  const failedErrorMessages = failedReceipts.map(receipt => {
-    const outcome = receipt.outcome || {};
-    const status = outcome.status || {};
-    const logs = Array.isArray(outcome.logs) ? outcome.logs : [];
-    const messages = collectText([status, logs]).filter(value =>
-      /E\d+:|panic|error|failed|failure|slippage|execution/i.test(value)
-    );
-    return [...new Set(messages)];
-  });
 
   const facts = [
     `Transaction hash: ${hash}`,
@@ -147,9 +138,11 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     if (item.receiver) facts.push(`Receipt ${item.index + 1} executor or receiver: ${item.receiver}`);
 
     if (item.statusLabel === "FAILED") {
-      const messages = failedErrorMessages[item.index] || [];
+      const messages = collectText([item.status, item.logs]).filter(value =>
+        /E\d+:|panic|error|failed|failure|slippage|execution/i.test(value)
+      );
       facts.push(`Receipt ${item.index + 1} failure detail: ${
-        messages.length ? messages.join(" | ") : JSON.stringify(item.status)
+        messages.length ? [...new Set(messages)].join(" | ") : JSON.stringify(item.status)
       }`);
     }
 
