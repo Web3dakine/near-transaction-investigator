@@ -3,12 +3,10 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-app.use(express.json());
-
-// Serve the frontend files from the public folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 const RPCS = [
   'https://archival-rpc.mainnet.fastnear.com',
@@ -16,7 +14,7 @@ const RPCS = [
   'https://rpc.mainnet.near.org'
 ];
 
-// Main application page
+// Serve the frontend
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -29,71 +27,90 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Transaction lookup
-app.post('/api/transaction', async (req, res) => {
-  const { tx, sender } = req.body || {};
+// NEAR RPC proxy used by public/index.html
+app.post('/api/rpc', async (req, res) => {
+  const { method, params } = req.body || {};
 
-  if (!tx || !sender) {
+  if (method !== 'tx' || !Array.isArray(params) || params.length < 2) {
     return res.status(400).json({
-      error: 'Transaction hash and sender account are required.'
+      error: 'Expected method "tx" with transaction hash and sender account ID in params.'
+    });
+  }
+
+  const [tx, sender] = params;
+
+  if (
+    typeof tx !== 'string' ||
+    typeof sender !== 'string' ||
+    !tx.trim() ||
+    !sender.trim()
+  ) {
+    return res.status(400).json({
+      error: 'Transaction hash and sender account ID are required.'
     });
   }
 
   const errors = [];
 
   for (const rpc of RPCS) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
 
-      let response;
+    try {
+      const response = await fetch(rpc, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'near-transaction-investigator',
+          method: 'tx',
+          params: [tx.trim(), sender.trim()]
+        }),
+        signal: controller.signal
+      });
+
+      const body = await response.text();
+      let data;
 
       try {
-        response = await fetch(rpc, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 'near-investigator',
-            method: 'tx',
-            params: [tx, sender]
-          }),
-          signal: controller.signal
-        });
-      } finally {
-        clearTimeout(timeout);
+        data = JSON.parse(body);
+      } catch {
+        throw new Error(`RPC returned invalid JSON (HTTP ${response.status}).`);
       }
-
-      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`RPC returned HTTP ${response.status}`);
+        throw new Error(`RPC returned HTTP ${response.status}.`);
       }
 
+      // Return RPC errors as JSON so the frontend can explain them.
       if (data.error) {
-        throw new Error(
-          data.error.message || JSON.stringify(data.error)
-        );
+        errors.push({
+          rpc,
+          error: data.error
+        });
+        continue;
       }
 
       if (!data.result) {
-        throw new Error('RPC returned no transaction result.');
+        errors.push({
+          rpc,
+          error: 'RPC returned no transaction result.'
+        });
+        continue;
       }
 
-      return res.json({
-        success: true,
-        rpc,
-        transaction: data.result
-      });
+      return res.json(data);
     } catch (error) {
       errors.push({
         rpc,
         error: error.name === 'AbortError'
-          ? 'Request timed out'
+          ? 'Request timed out.'
           : error.message
       });
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
