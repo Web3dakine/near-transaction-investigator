@@ -45,7 +45,7 @@ pt:{language:"Idioma",eyebrow:"Entenda a rede",headline:"Toda transação|tem um
 let language="en",lastReport=null;const t=key=>(LANG[language]&&LANG[language][key])||LANG.en[key]||key;
 function setLanguage(code){language=LANG[code]?code:"en";document.documentElement.lang=language;const d=LANG[language];const put=(sel,key)=>{const el=document.querySelector(sel);if(el)el.textContent=t(key)};put("#languageLabel","language");put(".eyebrow","eyebrow");const h=document.querySelector("h1");if(h){const parts=t("headline").split("|");h.innerHTML=esc(parts[0])+`<br><span class="gradient-text">${esc(parts[1])}</span>`}put(".hero-copy","hero");put("#errorTitle","errorTitle");put("#errorTitle + .panel-desc","errorDesc");put("label[for=errorInput]","errorLabel");put("#analyzeBtn","analyze");put("#sampleBtn","sample");put("#clearBtn","clear");put("#lookupTitle","lookupTitle");put("#lookupTitle + .panel-desc","lookupDesc");put("label[for=txHash]","hash");put("label[for=sender]","sender");const hs=document.querySelectorAll(".helper");if(hs[0])hs[0].textContent=t("errorHelp");if(hs[1])hs[1].textContent=t("lookupHelp");put("#lookupBtn","lookup");put(".results-label","report");if(lastReport)render(lastReport);else{const empty=result.querySelector(".empty-state");if(empty){empty.querySelector("strong").textContent=t("emptyTitle");empty.querySelector("p").textContent=t("emptyText")}setPill(t("waiting"),"")}}
 function setPill(label,tone){resultStatus.textContent=label;resultStatus.className="status-pill"+(tone?" "+tone:"")}
-function render(report){lastReport=report;const tone=report.tone||"warn";setPill(report.badge||report.level||t("waiting"),tone);const facts=report.facts||[];const failedFact=facts.find(x=>/^Failed receipts detected:/.test(x));const successFact=facts.find(x=>/^Successful receipts detected:/.test(x));const unknownFact=facts.find(x=>/^Receipt outcomes with unrecognized status:/.test(x));const refundFact=facts.find(x=>/refund|transfer wording appears/i.test(x));const failedCount=failedFact?failedFact.split(":").pop().trim():null,successCount=successFact?successFact.split(":").pop().trim():null,unknownCount=unknownFact?unknownFact.split(":").pop().trim():null;const txReport=facts.some(x=>/^Transaction hash:/.test(x));const stats=txReport?`<div class="summary-stats">${successCount!==null?`<div class="summary-stat"><span>${esc(t("success"))}</span><strong>${esc(successCount)}</strong></div>`:""}${failedCount!==null?`<div class="summary-stat"><span>${esc(t("failed"))}</span><strong>${esc(failedCount)}</strong></div>`:""}${unknownCount!==null?`<div class="summary-stat"><span>${esc(t("unknown"))}</span><strong>${esc(unknownCount)}</strong></div>`:""}</div>`:"";if(report.plainKind==="slippage"){report.localizedTitle=t("slipTitle");report.localizedSummary=t("slipTitle")+(report.hasRefundTransfer?". "+t("refundDesc"):".")}const plain=report.plainKind==="slippage"?{what:t("slipWhat"),funds:report.hasRefundTransfer?t("slipFunds"):t("genericFunds"),next:t("slipNext")}:{what:report.plainWhat||t("genericWhat"),funds:report.plainFunds||t("genericFunds"),next:report.plainNext||t("genericNext")};const localizedActions=report.plainKind==="slippage"?({en:["The swap contract rejected the trade because of slippage.","A USDT transfer back to the sender is recorded in the receipt logs.","Check the recipient account’s USDT transfer history and balance to confirm the refund."],es:["El contrato rechazó el intercambio por deslizamiento de precio.","Los registros muestran una transferencia de USDT de vuelta al remitente.","Comprueba el historial de transferencias y el saldo de USDT de la cuenta receptora para confirmar el reembolso."],fr:["Le contrat a rejeté l’échange à cause du slippage.","Les journaux enregistrent un transfert d’USDT vers le compte expéditeur.","Vérifiez l’historique des transferts et le solde USDT du compte destinataire pour confirmer le remboursement."],pt:["O contrato rejeitou a troca devido à slippage.","Os registros mostram uma transferência de USDT de volta para a conta de origem.","Confira o histórico de transferências e o saldo de USDT da conta destinatária para confirmar o reembolso."]}[language]):(report.actions||[]);const plainHTML=txReport?`<section class="plain-language"><h3>${esc(t("plainTitle"))}</h3><div class="plain-grid"><article><strong>${esc(t("what"))}</strong><p>${esc(plain.what)}</p></article><article><strong>${esc(t("funds"))}</strong><p>${esc(plain.funds)}</p></article><article><strong>${esc(t("next"))}</strong><p>${esc(plain.next)}</p></article></div></section>`:"";const refundHTML=refundFact?`<div class="refund-note"><strong>${esc(t("refund"))}</strong><p>${esc(t("refundDesc"))}</p></div>`:"";result.innerHTML=`<div class="result-title">${esc(report.localizedTitle||report.title)}</div><p class="result-summary">${esc(report.localizedSummary||report.summary)}</p><div class="confidence">${esc(t("confidence"))}: ${esc(report.confidence||"Review the evidence below.")}</div>${stats}${plainHTML}${refundHTML}<div class="result-section"><h3>${esc(t("recommended"))}</h3><ul class="result-list">${localizedActions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><details class="technical-details"><summary>${esc(t("technical"))} <span>${facts.length} ${esc(t("evidence"))}</span></summary><ul class="result-list evidence-list">${facts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details><details class="technical-details raw-details"><summary>${esc(t("original"))}</summary><div class="raw">${esc(report.raw||"No raw response available.")}</div><div class="raw-tools"><button class="btn btn-secondary" id="copyReportBtn">${esc(t("copy"))}</button></div></details>`;const cb=$("copyReportBtn");if(cb)cb.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report.raw||"");cb.textContent=t("copied")}catch{cb.textContent=t("copyFail")}})}
+function render(report){lastReport=report;const tone=report.tone||"warn";setPill(report.badge||report.level||t("waiting"),tone);const facts=report.facts||[];const failedFact=facts.find(x=>/^Failed receipts detected:/.test(x));const successFact=facts.find(x=>/^Successful receipts detected:/.test(x));const unknownFact=facts.find(x=>/^Receipt outcomes with unrecognized status:/.test(x));const refundFact=report.hasRefundTransfer===true;const failedCount=failedFact?failedFact.split(":").pop().trim():null,successCount=successFact?successFact.split(":").pop().trim():null,unknownCount=unknownFact?unknownFact.split(":").pop().trim():null;const txReport=facts.some(x=>/^Transaction hash:/.test(x));const stats=txReport?`<div class="summary-stats">${successCount!==null?`<div class="summary-stat"><span>${esc(t("success"))}</span><strong>${esc(successCount)}</strong></div>`:""}${failedCount!==null?`<div class="summary-stat"><span>${esc(t("failed"))}</span><strong>${esc(failedCount)}</strong></div>`:""}${unknownCount!==null?`<div class="summary-stat"><span>${esc(t("unknown"))}</span><strong>${esc(unknownCount)}</strong></div>`:""}</div>`:"";if(report.plainKind==="slippage"){report.localizedTitle=t("slipTitle");report.localizedSummary=t("slipTitle")+(report.hasRefundTransfer?". "+t("refundDesc"):".")}const plain=report.plainKind==="slippage"?{what:t("slipWhat"),funds:report.hasRefundTransfer?t("slipFunds"):t("genericFunds"),next:t("slipNext")}:{what:report.plainWhat||t("genericWhat"),funds:report.plainFunds||t("genericFunds"),next:report.plainNext||t("genericNext")};const localizedActions=report.plainKind==="slippage"?({en:["The swap contract rejected the trade because of slippage.","A USDT transfer back to the sender is recorded in the receipt logs.","Check the recipient account’s USDT transfer history and balance to confirm the refund."],es:["El contrato rechazó el intercambio por deslizamiento de precio.","Los registros muestran una transferencia de USDT de vuelta al remitente.","Comprueba el historial de transferencias y el saldo de USDT de la cuenta receptora para confirmar el reembolso."],fr:["Le contrat a rejeté l’échange à cause du slippage.","Les journaux enregistrent un transfert d’USDT vers le compte expéditeur.","Vérifiez l’historique des transferts et le solde USDT du compte destinataire pour confirmer le remboursement."],pt:["O contrato rejeitou a troca devido à slippage.","Os registros mostram uma transferência de USDT de volta para a conta de origem.","Confira o histórico de transferências e o saldo de USDT da conta destinatária para confirmar o reembolso."]}[language]):(report.actions||[]);const plainHTML=txReport?`<section class="plain-language"><h3>${esc(t("plainTitle"))}</h3><div class="plain-grid"><article><strong>${esc(t("what"))}</strong><p>${esc(plain.what)}</p></article><article><strong>${esc(t("funds"))}</strong><p>${esc(plain.funds)}</p></article><article><strong>${esc(t("next"))}</strong><p>${esc(plain.next)}</p></article></div></section>`:"";const refundHTML=refundFact?`<div class="refund-note"><strong>${esc(t("refund"))}</strong><p>${esc(t("refundDesc"))}</p></div>`:"";result.innerHTML=`<div class="result-title">${esc(report.localizedTitle||report.title)}</div><p class="result-summary">${esc(report.localizedSummary||report.summary)}</p><div class="confidence">${esc(t("confidence"))}: ${esc(report.confidence||"Review the evidence below.")}</div>${stats}${plainHTML}${refundHTML}<div class="result-section"><h3>${esc(t("recommended"))}</h3><ul class="result-list">${localizedActions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><details class="technical-details"><summary>${esc(t("technical"))} <span>${facts.length} ${esc(t("evidence"))}</span></summary><ul class="result-list evidence-list">${facts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details><details class="technical-details raw-details"><summary>${esc(t("original"))}</summary><div class="raw">${esc(report.raw||"No raw response available.")}</div><div class="raw-tools"><button class="btn btn-secondary" id="copyReportBtn">${esc(t("copy"))}</button></div></details>`;const cb=$("copyReportBtn");if(cb)cb.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report.raw||"");cb.textContent=t("copied")}catch{cb.textContent=t("copyFail")}})}
 function flatten(value,prefix="",output=[]){if(value&&typeof value==="object"){for(const [key,item] of Object.entries(value))flatten(item,prefix?`${prefix}.${key}`:key,output)}else output.push([prefix,String(value)]);return output}
 function diagnose(input){let parsed=null;try{parsed=JSON.parse(input)}catch{}const flat=parsed?flatten(parsed):[],text=[input,...flat.map(([key,value])=>`${key} ${value}`)].join("\n").toLowerCase();let report={title:"No specific error pattern recognized",level:"Needs review",tone:"warn",summary:"This prototype could not match the input to a known diagnosis. Inspect the original error before deciding what to change.",facts:["No diagnosis rule matched the provided text."],actions:["Find the exact error name, code, and nested cause.","Consult the official NEAR RPC documentation.","Do not infer transaction failure from an RPC lookup error alone."],confidence:"Low",raw:parsed?JSON.stringify(parsed,null,2):input};
 if(/e\d+: slippage error|slippage error|slippage_error/.test(text)){report={title:"Swap rejected by slippage protection",level:"Contract execution failure",tone:"bad",summary:"The error indicates that a swap failed a slippage check. A top level transaction may still be marked successful if another receipt completed or a refund was processed.",facts:["The input contains a slippage error.",...flat.filter(([key,value])=>/panic|executionerror|receipt|receiver|result|log/i.test(key+" "+value)).slice(0,8).map(([key,value])=>`${key}: ${value}`)],actions:["Inspect the failed receipt and confirm the contract error.","Check whether a refund or other receipt succeeded.","Request a fresh quote before retrying.","Do not increase slippage tolerance without understanding the price and execution risks."],confidence:"High for the meaning of the reported slippage error",raw:parsed?JSON.stringify(parsed,null,2):input}}
@@ -115,6 +115,73 @@ function analyzeTokenEvents(result, sender) {
   }
 
   return { events, relevantEvents, mints, transfers, burns, fundsExplanation, eventSentence };
+}
+
+async function lookupTokenMetadata(report) {
+  const events = report.tokenAnalysis && report.tokenAnalysis.events || [];
+  const contracts = [...new Set(events.map(event => event.executor).filter(Boolean))];
+  const metadataByContract = {};
+  await Promise.all(contracts.map(async accountId => {
+    try {
+      const response = await fetch("https://rpc.mainnet.near.org", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: "near-investigator-metadata",
+          method: "query",
+          params: {
+            request_type: "call_function",
+            finality: "final",
+            account_id: accountId,
+            method_name: "ft_metadata",
+            args_base64: "e30="
+          }
+        })
+      });
+      if (!response.ok) return;
+      const payload = await response.json();
+      const bytes = payload && payload.result && payload.result.result;
+      if (!Array.isArray(bytes) || payload.error) return;
+      const decoded = new TextDecoder().decode(new Uint8Array(bytes));
+      const metadata = JSON.parse(decoded);
+      if (metadata && typeof metadata.decimals === "number") metadataByContract[accountId] = metadata;
+    } catch (_) {
+      // Metadata is optional. A provider or browser may block this lookup.
+    }
+  }));
+
+  for (const event of events) {
+    const metadata = metadataByContract[event.executor];
+    if (metadata) event.metadata = metadata;
+  }
+  if (Object.keys(metadataByContract).length) {
+    report.facts.push("Token metadata retrieved for: " + Object.keys(metadataByContract).join(", "));
+    report.facts.push(...Object.entries(metadataByContract).map(([accountId, metadata]) =>
+      `Token metadata for ${accountId}: symbol ${metadata.symbol || "not provided"}; decimals ${metadata.decimals}; name ${metadata.name || "not provided"}`));
+    const senderEvents = events.filter(event => event.recipient === report.senderAccount || event.sender === report.senderAccount);
+    if (senderEvents.length) {
+      report.plainFunds = senderEvents.map(event => {
+        const metadata = event.metadata;
+        const raw = event.amount == null ? null : BigInt(event.amount);
+        let amountText = event.amount == null ? "an unspecified amount" : `${event.amount} raw units`;
+        if (raw !== null && metadata && Number.isInteger(metadata.decimals) && metadata.decimals >= 0 && metadata.decimals <= 30) {
+          const divisor = 10n ** BigInt(metadata.decimals);
+          const whole = raw / divisor;
+          const fraction = (raw % divisor).toString().padStart(metadata.decimals, "0").replace(/0+$/, "");
+          amountText = `${whole}${fraction ? "." + fraction : ""} ${metadata.symbol || metadata.name || "tokens"} (${event.amount} raw units)`;
+        }
+        if (event.type === "ft_mint") return `The contract ${event.executor} recorded ${amountText} minted to ${event.recipient}.`;
+        if (event.type === "ft_burn") return `The contract ${event.executor} recorded ${amountText} burned from ${event.sender}.`;
+        return `The contract ${event.executor} recorded a transfer of ${amountText} from ${event.sender} to ${event.recipient}${event.memo ? ` with memo “${event.memo}”` : ""}.`;
+      }).join(" ");
+    }
+  } else {
+    report.facts.push("Token metadata lookup: unavailable or unsupported for the detected contract. Raw amounts are shown without conversion.");
+  }
+  report.hasRefundTransfer = events.some(event => event.type === "ft_transfer" && /refund/i.test(event.memo || "") && event.receiptSucceeded);
+  report.senderAccount = report.senderAccount || "";
+  return report;
 }
 
 function classifyTxResult(data, hash, sender, httpStatus) {
@@ -318,11 +385,12 @@ function classifyTxResult(data, hash, sender, httpStatus) {
   const allLogs = receiptDetails.flatMap(item => item.logs).join(" ");
   const allFailures = failedErrorMessages.flat().join(" ");
   const isSlippage = /slippage/i.test(allLogs + " " + allFailures);
-  const hasRefundTransfer = receiptDetails.some(item => /usdt\.tether-token\.near/i.test(item.receiver || "") && item.logs.some(log => /"old_owner_id":"v2\.ref-finance\.near"/.test(log) && /"new_owner_id":"naimul7772\.tg"/.test(log) && /"memo":"refund"/.test(log)));
+  const hasRefundTransfer = tokenAnalysis.events.some(event => event.type === "ft_transfer" && /refund/i.test(event.memo || "") && event.receiptSucceeded);
   report.plainKind = isSlippage ? "slippage" : "transaction";
   report.hasRefundTransfer = hasRefundTransfer;
-  report.plainWhat = isSlippage ? t("slipWhat") : (failedReceipts.length > 0 ? `The transaction returned ${successfulReceipts.length} successful receipt(s) and ${failedReceipts.length} failed receipt(s). The top level status is ${txStatus ? JSON.stringify(txStatus) : "not provided"}. Review the failed receipt details below to see which operation failed.` : txSucceeded ? `The transaction called ${r.transaction && r.transaction.receiver_id ? r.transaction.receiver_id : "a contract or account"}. The top level execution status reports success, with ${successfulReceipts.length} successful receipt(s), ${failedReceipts.length} failed receipt(s), and ${unknownReceipts.length} unrecognised receipt status(es).` : `The RPC response returned ${successfulReceipts.length} successful receipt(s), ${failedReceipts.length} failed receipt(s), and ${unknownReceipts.length} unrecognised receipt status(es). The available status information does not establish a complete outcome.`);
+  report.plainWhat = isSlippage ? t("slipWhat") : (tokenAnalysis.mints.some(event => event.recipient === sender) && txSucceeded ? `Your account successfully called ${r.transaction && r.transaction.receiver_id ? r.transaction.receiver_id : "a contract"}. The receipt logs record ${tokenAnalysis.mints.filter(event => event.recipient === sender).length} token mint event(s) for your account, and ${successfulReceipts.length} receipt(s) succeeded with ${failedReceipts.length} failed.` : failedReceipts.length > 0 ? `The transaction returned ${successfulReceipts.length} successful receipt(s) and ${failedReceipts.length} failed receipt(s). The failed receipt details identify which operation did not complete.` : txSucceeded ? `Your transaction called ${r.transaction && r.transaction.receiver_id ? r.transaction.receiver_id : "a contract or account"}. All ${successfulReceipts.length} reported receipt(s) succeeded, with no failed receipts. The events below show the contract activity recorded in the logs.` : `The RPC response returned ${successfulReceipts.length} successful receipt(s), ${failedReceipts.length} failed receipt(s), and ${unknownReceipts.length} unrecognised receipt status(es). The available status information does not establish a complete outcome.`);
   report.tokenAnalysis = tokenAnalysis;
+  report.senderAccount = sender;
   report.plainFunds = isSlippage
     ? (hasRefundTransfer ? t("slipFunds") : t("genericFunds"))
     : tokenAnalysis.fundsExplanation;
