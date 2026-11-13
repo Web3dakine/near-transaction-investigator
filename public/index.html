@@ -120,6 +120,74 @@ html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:#07
 @media(max-width:760px){.sidebar{position:relative;inset:auto;width:auto;height:auto;padding:12px 16px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;border-right:0;border-bottom:1px solid rgba(255,255,255,.06)}.side-brand{padding:0}.side-brand-mark{width:32px;height:32px}.side-label,.sidebar-bottom{display:none}.side-nav{display:flex;gap:3px}.side-nav a{padding:8px 9px;font-size:0;gap:0}.side-nav a .nav-icon{font-size:16px}.dashboard{margin-left:0;padding:0 16px 22px}.topbar{height:56px;margin-bottom:14px}.explorer-hero{padding:28px 17px 20px;min-height:220px}.hero-content h1{font-size:30px}.hero-content p{font-size:10px}.search-console{flex-wrap:wrap;padding:7px;border-radius:10px}.search-field{flex-basis:100%;padding:0 6px}.search-divider{height:1px;width:100%;margin:0;background:#e7e1ec}.sender-field{max-width:none}.search-submit{width:100%;margin-top:5px}.capability-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 20px}.capability-card{min-height:58px}.lower-grid{grid-template-columns:1fr}.section-heading h2{font-size:17px}}
 @media(max-width:430px){.dashboard{padding:0 11px 18px}.sidebar{padding:10px 11px}.side-brand strong{font-size:12px}.side-brand small{font-size:7px}.side-nav a{padding:7px}.top-actions{gap:6px}.language-control span{display:none}.language-control select{max-width:92px;padding:7px}.network-pill{font-size:8px;padding:7px}.explorer-hero{padding:25px 12px 17px}.hero-content h1{font-size:26px}.capability-card{gap:8px;padding:9px}.capability-card strong{font-size:9px}.capability-card small{font-size:7px}.cap-icon{width:25px;height:25px}.section-heading{align-items:flex-start}.live-tag{font-size:7px}.results-panel{padding:13px!important}.results-panel .summary-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.results-panel .plain-grid{grid-template-columns:1fr}.results-panel .plain-grid article:first-child{grid-column:auto}}
 </style>
+<style id="layout-centering-and-mobile-refinement">
+/* Keep the desktop workspace visually balanced inside the space beside the sidebar. */
+@media (min-width: 761px){
+  .dashboard{width:calc(100% - 244px);max-width:1600px;margin-left:244px;margin-right:auto;padding-left:clamp(24px,2.2vw,38px);padding-right:clamp(24px,2.2vw,38px)}
+  .topbar{margin-bottom:22px}
+  .explorer-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:38px clamp(28px,4vw,64px) 28px;min-height:280px}
+  .hero-content{width:100%;max-width:760px;margin-inline:auto;text-align:center}
+  .hero-content h1{margin-inline:auto}
+  .hero-content p{margin-left:auto;margin-right:auto}
+  .search-console{width:min(100%,1040px);margin-left:auto;margin-right:auto}
+  .hero-note{width:100%;text-align:center}
+  .capability-strip,.report-area,.lower-grid,.footer{width:100%;max-width:100%}
+}
+/* Prevent long identifiers and report content from forcing horizontal page scrolling. */
+.app-frame,.dashboard,.report-area,.results-panel,#result{min-width:0;max-width:100%}
+#result, .result-summary, .result-list, .movement-account code, .raw, .technical-details{overflow-wrap:anywhere;word-break:break-word}
+.search-field input{min-width:0}
+/* Tablet and phone navigation: retain readable labels and provide comfortable touch targets. */
+@media(max-width:760px){
+  .sidebar{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:12px 16px}
+  .side-brand{align-self:flex-start}
+  .side-nav{display:flex;width:100%;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 0 4px;scrollbar-width:thin}
+  .side-nav a,.side-nav a.active{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:9px 11px;font-size:10px;white-space:nowrap;min-height:38px}
+  .side-nav a .nav-icon{font-size:14px;width:auto}
+  .dashboard{width:100%;max-width:900px;margin:0 auto;padding:0 18px 24px}
+  .explorer-hero{width:100%;margin-left:auto;margin-right:auto}
+  .capability-strip{width:100%}
+}
+@media(max-width:560px){
+  .sidebar{padding:10px 12px}
+  .side-nav{gap:5px}
+  .side-nav a,.side-nav a.active{padding:8px 9px;font-size:9px;min-height:36px}
+  .dashboard{padding:0 12px 20px}
+  .topbar{height:auto;min-height:54px;align-items:center;gap:8px;padding:9px 0;flex-wrap:wrap}
+  .breadcrumb{font-size:9px}
+  .top-actions{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+  .explorer-hero{min-height:0;padding:26px 13px 18px;border-radius:14px}
+  .hero-content h1{font-size:clamp(25px,7vw,32px);line-height:1.14}
+  .hero-content p{font-size:11px;line-height:1.6;margin-bottom:15px}
+  .search-console{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;width:100%;padding:8px}
+  .search-field{width:100%;min-height:42px;padding:0 5px}
+  .search-divider{display:block;width:100%;height:1px;margin:0}
+  .search-submit{width:100%;min-height:43px;margin:2px 0 0}
+  .hero-note{font-size:8px;line-height:1.5;padding:0 4px}
+  .capability-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .capability-card{min-width:0;min-height:62px;padding:9px;gap:7px}
+  .capability-card strong{font-size:9px;overflow-wrap:anywhere}
+  .section-heading{gap:8px}
+  .section-heading p{line-height:1.5}
+  .live-tag{white-space:nowrap}
+  .results-head{align-items:flex-start;flex-wrap:wrap}
+  .summary-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .movement-flow{grid-template-columns:minmax(0,1fr);gap:7px}
+  .movement-arrow{transform:rotate(90deg);justify-self:start}
+  .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .actions .btn{width:100%;min-width:0;padding-inline:9px}
+  .footer{line-height:1.6;overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+  .side-nav a,.side-nav a.active{font-size:8px;padding:7px}
+  .capability-card{align-items:flex-start;flex-direction:column}
+  .top-actions{width:100%;justify-content:space-between;margin-left:0}
+  .language-control span{display:inline}
+  .language-control select{max-width:105px}
+  .network-pill{font-size:8px}
+  .actions{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <div class="app-frame">
