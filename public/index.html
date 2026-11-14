@@ -604,7 +604,7 @@ async function lookupTokenMetadata(report) {
     if (balance.error) report.facts.push(`Current ${balance.symbol} balance lookup failed for ${balance.contract}: ${balance.error}`);
     else report.facts.push(`Current ${balance.symbol} balance for ${report.senderAccount}: ${balance.formatted} ${balance.symbol} (${balance.raw} raw units), retrieved ${balance.retrievedAt}. This is a current balance snapshot, not the balance immediately after this transaction.`);
   }
-  report.hasRefundTransfer = events.some(event => event.type === "ft_transfer" && /refund/i.test(event.memo || "") && event.receiptSucceeded);
+  report.hasRefundTransfer = events.some(event => event.type === "ft_transfer" && event.recipient === report.senderAccount && event.amount !== null && /^\d+$/.test(String(event.amount)) && /refund/i.test(event.memo || "") && event.receiptSucceeded);
   report.senderAccount = report.senderAccount || "";
   return report;
 }
@@ -708,6 +708,14 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     try { return sum + BigInt(call.deposit || "0"); } catch (_) { return sum; }
   }, 0n);
   const yoctoPerNear = 10n ** 24n;
+  const receiptTokensBurntYocto = receipts.reduce((sum, receipt) => {
+    try { return sum + BigInt(receipt && receipt.outcome && receipt.outcome.tokens_burnt != null ? receipt.outcome.tokens_burnt : "0"); } catch (_) { return sum; }
+  }, 0n);
+  const formatYoctoNear = value => {
+    const whole = value / yoctoPerNear;
+    const fraction = (value % yoctoPerNear).toString().padStart(24, "0").replace(/0+$/, "");
+    return `${whole}${fraction ? "." + fraction : ""}`;
+  };
   const attachedDepositNear = attachedDepositYocto > 0n
     ? `${attachedDepositYocto / yoctoPerNear}${(attachedDepositYocto % yoctoPerNear).toString().padStart(24, "0").replace(/0+$/, "") ? "." + (attachedDepositYocto % yoctoPerNear).toString().padStart(24, "0").replace(/0+$/, "") : ""}`
     : null;
@@ -730,6 +738,8 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     const id = receipt.id || "Receipt ID unavailable";
     facts.push(`Receipt ${item.index + 1} status: ${item.statusLabel} (${id})`);
     if (item.receiver) facts.push(`Receipt ${item.index + 1} executor or receiver: ${item.receiver}`);
+    if (outcome.gas_burnt != null) facts.push(`Receipt ${item.index + 1} gas burnt: ${outcome.gas_burnt} gas units`);
+    if (outcome.tokens_burnt != null) facts.push(`Receipt ${item.index + 1} tokens burnt: ${outcome.tokens_burnt} yoctoNEAR (${formatYoctoNear(BigInt(outcome.tokens_burnt))} NEAR)`);
 
     if (item.statusLabel === "FAILED") {
       const messages = failedErrorMessages[failedReceipts.indexOf(receipt)] || [];
@@ -764,6 +774,7 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     facts.push("Token event analysis: no recognised NEP-141 ft_mint, ft_transfer, ft_burn or NEP-245 mt_transfer event was found in the returned receipt logs.");
   }
 
+  facts.push(`Total receipt execution cost: ${formatYoctoNear(receiptTokensBurntYocto)} NEAR (${receiptTokensBurntYocto.toString()} yoctoNEAR), based on the tokens_burnt values returned for the listed receipts. This excludes any costs not represented in those receipt outcomes.`);
   if (functionNames.length) facts.push(`Transaction function call(s): ${functionNames.join(", ")}`);
   if (attachedDepositNear !== null) facts.push(`Attached function-call deposit: ${attachedDepositNear} NEAR (${attachedDepositYocto.toString()} yoctoNEAR). This is the amount attached to the action, not proof of the amount ultimately refunded.`);
   if (contractErrorMessages.length) facts.push(`Extracted contract error: ${contractErrorMessages.join(" | ")}`);
@@ -838,7 +849,7 @@ function classifyTxResult(data, hash, sender, httpStatus) {
   const allLogs = receiptDetails.flatMap(item => item.logs).join(" ");
   const allFailures = failedErrorMessages.flat().join(" ");
   const isSlippage = /slippage/i.test(allLogs + " " + allFailures);
-  const hasRefundTransfer = tokenAnalysis.events.some(event => event.type === "ft_transfer" && /refund/i.test(event.memo || "") && event.receiptSucceeded);
+  const hasRefundTransfer = tokenAnalysis.events.some(event => event.type === "ft_transfer" && event.recipient === sender && event.amount !== null && /^\d+$/.test(String(event.amount)) && /refund/i.test(event.memo || "") && event.receiptSucceeded);
   report.plainKind = isSlippage ? "slippage" : "transaction";
   report.hasRefundTransfer = hasRefundTransfer;
   report.plainWhat = isSlippage ? t("slipWhat") : (tokenAnalysis.mints.some(event => event.recipient === sender) && txSucceeded ? `Your account successfully called ${r.transaction && r.transaction.receiver_id ? r.transaction.receiver_id : "a contract"}. The receipt logs record ${tokenAnalysis.mints.filter(event => event.recipient === sender).length} token mint event(s) for your account, and ${successfulReceipts.length} receipt(s) succeeded with ${failedReceipts.length} failed.` : failedReceipts.length > 0 ? `The transaction returned ${successfulReceipts.length} successful receipt(s) and ${failedReceipts.length} failed receipt(s). The failed receipt details identify which operation did not complete.` : txSucceeded ? `Your transaction called ${r.transaction && r.transaction.receiver_id ? r.transaction.receiver_id : "a contract or account"}. All ${successfulReceipts.length} reported receipt(s) succeeded, with no failed receipts. The events below show the contract activity recorded in the logs.` : `The RPC response returned ${successfulReceipts.length} successful receipt(s), ${failedReceipts.length} failed receipt(s), and ${unknownReceipts.length} unrecognised receipt status(es). The available status information does not establish a complete outcome.`);
