@@ -739,7 +739,10 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     facts.push(`Receipt ${item.index + 1} status: ${item.statusLabel} (${id})`);
     if (item.receiver) facts.push(`Receipt ${item.index + 1} executor or receiver: ${item.receiver}`);
     if (outcome.gas_burnt != null) facts.push(`Receipt ${item.index + 1} gas burnt: ${outcome.gas_burnt} gas units`);
-    if (outcome.tokens_burnt != null) facts.push(`Receipt ${item.index + 1} tokens burnt: ${outcome.tokens_burnt} yoctoNEAR (${formatYoctoNear(BigInt(outcome.tokens_burnt))} NEAR)`);
+    if (outcome.tokens_burnt != null) {
+      const receiptCost = /^\d+$/.test(String(outcome.tokens_burnt)) ? BigInt(outcome.tokens_burnt) : null;
+      facts.push(`Receipt ${item.index + 1} tokens burnt: ${outcome.tokens_burnt} yoctoNEAR${receiptCost === null ? "" : ` (${formatYoctoNear(receiptCost)} NEAR)`}`);
+    }
 
     if (item.statusLabel === "FAILED") {
       const messages = failedErrorMessages[failedReceipts.indexOf(receipt)] || [];
@@ -971,8 +974,9 @@ function classifyTxResult(data, hash, sender, httpStatus) {
     const followupText = linkedSuccessfulFollowups.length
       ? ` A subsequent receipt referenced by the failed receipt executed successfully under ${(linkedSuccessfulFollowups[0].outcome && linkedSuccessfulFollowups[0].outcome.executor_id) || "an account not identified"}. This is consistent with a follow-up or refund processing step, but the response does not show how much was returned.`
       : " No successful follow-up receipt linked from the failed receipt was identified.";
-    report.plainFunds = `${depositText}${followupText} The supplied logs contain no explicit asset transfer proving the refund amount.`;
-    report.plainNext = "Check the sender account's transaction and balance history to confirm whether any of the 5 NEAR attached deposit was returned. Account for gas costs separately; the successful follow-up receipt does not establish the refund amount.";
+    const gasText = ` The returned receipt outcomes report ${formatYoctoNear(receiptTokensBurntYocto)} NEAR in execution costs (${receiptTokensBurntYocto.toString()} yoctoNEAR).`;
+    report.plainFunds = `${depositText}${followupText}${gasText} The supplied logs contain no explicit asset transfer proving the refund amount.`;
+    report.plainNext = "Check the sender account's transaction and balance history to confirm whether any of the ${attachedDepositNear || "attached"} NEAR attached deposit was returned. Account for gas costs separately; the successful follow-up receipt does not establish the refund amount.";
     report.actions = [
       "Check the sender account's transaction and balance history to establish whether any of the attached deposit was returned.",
       "Account for gas costs separately. The supplied RPC response does not establish the net amount returned."
