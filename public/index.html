@@ -995,17 +995,20 @@ function classifyTxResult(data, hash, sender, httpStatus) {
   if (failedReceipts.length > 0 && functionCalls.length > 0) {
     const receiver = (r.transaction && r.transaction.receiver_id) || "the target contract";
     const method = functionNames[0] || "a contract method";
-    const errorText = contractErrorMessages.find(value => /insufficient balance/i.test(value)) || contractErrorMessages[0] || "The contract returned a failure status.";
+    const errorText = contractErrorMessages[0] || "The contract returned a failure status."; 
     const conciseError = errorText.replace(/^.*?(?:ExecutionError\s*[:=]?\s*)/i, "").replace(/^Smart contract panicked:\s*/i, "");
     const receiptSummary = `The transaction produced ${failedReceipts.length} failed receipt${failedReceipts.length === 1 ? "" : "s"} and ${successfulReceipts.length} successful ${linkedSuccessfulFollowups.length ? "follow-up " : ""}receipt${successfulReceipts.length === 1 ? "" : "s"}.`;
-    report.plainWhat = `${sender || "The sender"} attempted to purchase an item by calling ${method} on ${receiver}. The contract rejected the purchase because the available balance was insufficient for the swap. ${receiptSummary}${linkedSuccessfulFollowups.length ? ` The follow-up receipt executed under ${(linkedSuccessfulFollowups[0].outcome && linkedSuccessfulFollowups[0].outcome.executor_id) || "an account not identified"}, but its success does not confirm the refund amount.` : ""}`;
+    report.plainWhat = `${sender || "The sender"} called ${method} on ${receiver}. The contract returned this failure: ${conciseError}. ${receiptSummary}${linkedSuccessfulFollowups.length ? ` The follow-up receipt executed under ${(linkedSuccessfulFollowups[0].outcome && linkedSuccessfulFollowups[0].outcome.executor_id) || "an account not identified"}, but its success does not confirm the refund amount.` : ""}`;
+    report.localizedNarrative = null;
     report.suppressRecommendations = true;
     const depositText = attachedDepositNear !== null ? `The function call attached ${attachedDepositNear} NEAR. This is the attempted attached deposit, not a confirmed refund amount.` : "The supplied response does not establish an attached deposit amount.";
     const followupText = linkedSuccessfulFollowups.length
       ? ` A subsequent receipt referenced by the failed receipt executed successfully under ${(linkedSuccessfulFollowups[0].outcome && linkedSuccessfulFollowups[0].outcome.executor_id) || "an account not identified"}. This is consistent with a follow-up or refund processing step, but the response does not show how much was returned.`
       : " No successful follow-up receipt linked from the failed receipt was identified.";
     report.plainFunds = `${depositText}${followupText} The supplied logs contain no explicit asset transfer proving the refund amount.`;
-    report.plainNext = "Check the sender account's transaction and balance history to confirm whether any of the 5 NEAR attached deposit was returned. Account for gas costs separately; the successful follow-up receipt does not establish the refund amount.";
+    report.plainNext = attachedDepositNear !== null
+      ? `Check the sender account transaction and balance history to confirm whether any of the attached deposit of ${attachedDepositNear} NEAR was returned. Account for gas costs separately; the successful follow-up receipt does not establish the refund amount.`
+      : "Check the sender account transaction and balance history to establish whether any funds were returned. Account for gas costs separately; the successful follow-up receipt does not establish the refund amount.";
     report.actions = [
       "Check the sender account's transaction and balance history to establish whether any of the attached deposit was returned.",
       "Account for gas costs separately. The supplied RPC response does not establish the net amount returned."
