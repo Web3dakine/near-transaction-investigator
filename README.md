@@ -7,7 +7,9 @@ A web application for investigating NEAR Protocol transactions, examining receip
 
 ## Overview
 
-NEAR Transaction Investigator helps users understand what happened during a NEAR transaction. It retrieves public transaction data through a server side RPC proxy, examines the transaction and its receipt outcomes, and presents a readable report alongside the underlying technical evidence.
+NEAR Transaction Investigator helps users understand what happened during a transaction on the NEAR blockchain. Users provide a transaction hash and sender account ID. The application retrieves public transaction data through a server side RPC proxy, examines the transaction and its receipt outcomes, and presents a readable report alongside the underlying technical evidence.
+
+NEAR is the source of the transaction and receipt data used by the application. Its RPC interface makes it possible to inspect execution outcomes and receipt logs, which the application analyses to explain transaction behaviour and identify supported token events.
 
 The application also includes a local RPC error inspector. Users can paste an RPC error or a transaction RPC response to inspect it in the browser.
 
@@ -25,6 +27,18 @@ The application also includes a local RPC error inspector. Users can paste an RP
 - RPC error inspection with a sample response for local testing.
 - Interface and report translations in English, Spanish, French, and Portuguese.
 
+## Try the live application
+
+1. Open the [live application](https://near-transaction-investigator.onrender.com).
+2. Enter a NEAR transaction hash and the sender account ID in the investigation form.
+3. Run the investigation.
+4. Review the plain language explanation and recommended next steps.
+5. Expand the technical evidence to inspect receipt outcomes, recognised events, and the original RPC response where available.
+6. Use the language selector to check the supported interface languages.
+7. Open the RPC error inspector to paste and analyse an RPC error or transaction response locally.
+
+For a meaningful transaction report, use a real NEAR transaction hash together with the account ID of the transaction signer. Results depend on the data returned by the configured RPC providers and the event logs emitted by the contracts involved.
+
 ## How it works
 
 1. Enter the transaction hash and the sender account ID.
@@ -33,7 +47,7 @@ The application also includes a local RPC error inspector. Users can paste an RP
 4. The browser analyses transaction outcomes, receipt logs, and recognised token events.
 5. The report presents a plain language explanation and supporting technical evidence.
 
-The application does not require a wallet connection, seed phrase, or private key.
+The application does not require a wallet connection, seed phrase, or private key. It performs read only lookups and does not sign or submit transactions.
 
 ## Run locally
 
@@ -126,8 +140,8 @@ Returns the service status and runtime information.
 
 ## Project status
 
-This is an active hackathon project. The live application and source code are available at the links above.
+NEAR Transaction Investigator was submitted to NEAR HACKATHON in November 2026. The live application and public source code remain available for review.
 
 ## License
 
-No open source license has been specified yet. All rights remain with the repository owner unless a license is added.
+See the [LICENSE](LICENSE) file for the terms governing use, modification, and distribution of this project.
