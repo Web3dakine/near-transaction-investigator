@@ -37,6 +37,20 @@ The application also includes a local RPC error inspector. Users can paste an RP
 6. Use the language selector to check the supported interface languages.
 7. Open the RPC error inspector to paste and analyse an RPC error or transaction response locally.
 
+### Example transaction
+
+The following previously tested NEAR mainnet transaction can be used to try the investigation flow:
+
+| Field | Value |
+|---|---|
+| Transaction hash | `DTzphZo2ZNH5u9PkCLjRo4PvWSweZdr8ayUV819RjPk8` |
+| Sender account | `i7118951866.tg` |
+| Observed result | Successful transaction |
+| Receipt outcomes | 2 successful, 0 failed |
+| Recognised token event | 0.300011 HOT minted by `game.hot.tg` |
+
+The observed result is provided as a reference for this example. Live reports may include additional metadata or balance information depending on current RPC and token contract responses.
+
 For a meaningful transaction report, use a real NEAR transaction hash together with the account ID of the transaction signer. Results depend on the data returned by the configured RPC providers and the event logs emitted by the contracts involved.
 
 ## How it works
@@ -102,7 +116,9 @@ The backend currently tries the following NEAR mainnet endpoints in sequence whe
 
 Provider availability and archival coverage can vary. A failed lookup does not by itself prove that a transaction failed on chain.
 
-## API
+## Public API
+
+The application exposes a small read only backend interface used by its frontend.
 
 ### Transaction lookup
 
@@ -120,13 +136,17 @@ Provider availability and archival coverage can vary. A failed lookup does not b
 }
 ```
 
-The backend validates the request and transaction hash format before querying the configured RPC providers.
+The backend validates the request and transaction hash format before querying the configured NEAR RPC providers. This endpoint retrieves public chain data. It does not accept wallet credentials, private keys, or signing instructions.
 
 ### Health check
 
 **Endpoint:** `GET /api/health`
 
 Returns the service status and runtime information.
+
+### Security scope
+
+The API documentation describes the public request format required by the application. It does not publish private credentials or grant access to a user's wallet. The application performs read only transaction lookups and does not sign or submit transactions.
 
 ## Important interpretation notes
 
